@@ -78,16 +78,13 @@
   <section class="hero">
     <div class="panel">
       <h1>Licence No. बाट अधिवक्ताको नाम राख्ने फर्म</h1>
-      <p class="lead">एक वा धेरै पक्षका Licence number राख्दा online data source बाट नेपाली नाम खोजेर बहससम्बन्धी वाक्य स्वतः तयार हुन्छ। “+ अर्को पक्ष थप्नुहोस्” बाट निवेदक/विपक्षी/वादी/प्रतिवादी आदि पक्ष थप्न सकिन्छ। Data यस HTML भित्र embed गरिएको छैन।</p>
-      <div class="status" id="loadStatus"><span class="dot"></span><span>Online data source तयार गर्दै...</span></div>
+      <p class="lead">एक वा धेरै पक्षका Licence number राख्दा सोही folder मा रहेको <b>advocatedata.js</b> भित्रको data बाट नेपाली नाम खोजेर बहससम्बन्धी वाक्य स्वतः तयार हुन्छ। “+ अर्को पक्ष थप्नुहोस्” बाट निवेदक/विपक्षी/वादी/प्रतिवादी आदि पक्ष थप्न सकिन्छ।</p>
+      <div class="status" id="loadStatus"><span class="dot"></span><span>Local advocatedata.js data तयार गर्दै...</span></div>
     </div>
     <div class="panel">
-      <label for="sourceUrl">Online source URL</label>
-      <div class="sourceGrid">
-        <input id="sourceUrl" value="https://shivaprasadacharya.github.io/adhivaktakokundali/" />
-        <button class="btn secondary" id="reloadBtn">Reload</button>
-      </div>
-      <div class="hint">Primary source: GitHub Pages. यदि browserले block गर्‍यो भने raw GitHub fallback स्वतः प्रयास हुन्छ।</div>
+      <label>Local data file</label>
+      <div class="status"><span class="dot good"></span><span><b>advocatedata.js</b> लाई यही <b>index.html</b> भएको folder मा राख्नुहोस्।</span></div>
+      <div class="hint">यो webpage अब पूर्ण रूपमा local data मा सीमित छ। Online link, external source, upload र paste option हटाइएको छ।</div>
     </div>
   </section>
 
@@ -97,7 +94,7 @@
         <label>पक्ष तथा Licence No.</label>
         <div class="partyList" id="partyList"></div>
         <button type="button" class="addLink" id="addPartyBtn">＋ अर्को पक्ष थप्नुहोस्</button>
-        <div class="hint">धेरै Licence No. comma, space, newline वा “र” ले छुट्याउन सकिन्छ। Nepali/English/mixed digits स्वीकारिन्छ: 12२३, १२२३, 1223</div>
+        <div class="hint">धेरै Licence No. comma (,), semicolon (;), space, newline वा “र” ले छुट्याउन सकिन्छ। Nepali/English/mixed digits स्वीकारिन्छ: 12२३, १२२३, 1223</div>
       </div>
 
       <div>
@@ -124,7 +121,7 @@
 
       <div class="full">
         <label>Output</label>
-        <div class="output" id="outputBox">Online data load भएपछि output यहाँ देखिन्छ।</div>
+        <div class="output" id="outputBox">Local data load भएपछि output यहाँ देखिन्छ।</div>
         <div class="copyLine">
           <button class="btn" id="copyOutput">Copy Output</button>
           <button class="btn secondary" id="copyName">Copy Name Only</button>
@@ -135,16 +132,13 @@
     <div class="record" id="recordBox" style="display:none"></div>
     <ul class="miniList" id="multiBox" style="display:none"></ul>
   </section>
-  <footer>Online data is fetched from the provided GitHub Pages/source URL; this page contains only lookup logic.</footer>
+  <footer>Data source: same folder मा रहेको <b>advocatedata.js</b>. Online fetch, external upload र paste हटाइएको छ।</footer>
 </div>
 
+<script src="advocatedata.js"></script>
 <script>
 'use strict';
 const $ = id => document.getElementById(id);
-const DEFAULT_PAGE_URL = 'https://shivaprasadacharya.github.io/adhivaktakokundali/';
-const RAW_URL = 'https://raw.githubusercontent.com/ShivaPrasadAcharya/adhivaktakokundali/main/index.html';
-const CACHE_KEY = 'advocateOnlineDataCache.v3';
-const CACHE_TIME_KEY = 'advocateOnlineDataCacheTime.v3';
 let advocateData = [];
 let activeRecord = null;
 let activeRecords = [];
@@ -153,11 +147,16 @@ let partyCounter = 0;
 
 const SIDES = [
   'निवेदकको तर्फबाट', 'विपक्षीको तर्फबाट', 'वादीको तर्फबाट', 'प्रतिवादीको तर्फबाट',
-  'सरकारको तर्फबाट', 'पुनरावेदकको तर्फबाट', 'प्रत्यर्थीको तर्फबाट', 'custom'
+  'नेपाल सरकारको तर्फबाट', 'पुनरावेदकको तर्फबाट', 'प्रत्यर्थीको तर्फबाट', 'custom'
 ];
 const SIDE_LABELS = {
   custom:'Custom...'
 };
+const GOVT_SIDE = 'नेपाल सरकारको तर्फबाट';
+const GOVT_ROLES = [
+  'सहायक जिल्ला न्यायाधिवक्ता', 'जिल्ला न्यायाधिवक्ता', 'उपन्यायाधिवक्ता',
+  'सहन्यायाधिवक्ता', 'नायव महान्यायाधिवक्ता', 'महान्यायाधिवक्ता'
+];
 
 const NepaliDigits = {'०':'0','१':'1','२':'2','३':'3','४':'4','५':'5','६':'6','७':'7','८':'8','९':'9'};
 function normalizeLicence(v){
@@ -253,14 +252,25 @@ function sideText(block){
   const custom = block.querySelector('.customSide');
   return ensureTarafbat(sel.value === 'custom' ? custom.value.trim() : sel.value);
 }
+function selectedGovtRole(block){
+  const sel = block.querySelector('.partySide');
+  const role = block.querySelector('.govtRole');
+  return sel && sel.value === GOVT_SIDE && role ? role.value.trim() : '';
+}
 function advocateTitle(count){
   if(count === 1) return 'अधिवक्ता';
   if(count === 2) return 'अधिवक्ताद्वय';
   return 'अधिवक्ताहरू';
 }
+function roleTitle(baseRole, count){
+  if(!baseRole) return advocateTitle(count);
+  if(count === 1) return baseRole;
+  if(count === 2) return baseRole + 'द्वय';
+  return baseRole + 'हरू';
+}
 function makeGroupPhrase(group){
   const names = joinNepaliList(group.records.map(displayRecordName));
-  const descriptor = [$('honorific').value.trim(), advocateTitle(group.records.length)].filter(Boolean).join(' ');
+  const descriptor = [$('honorific').value.trim(), roleTitle(group.govtRole, group.records.length)].filter(Boolean).join(' ');
   const parts = [group.side, descriptor, names].filter(Boolean);
   return parts.join(' ');
 }
@@ -275,17 +285,6 @@ function setStatus(msg, type='info'){
   dot.className = 'dot' + (type==='ok'?' good': type==='bad'?' bad':'');
   $('loadStatus').querySelector('span:last-child').textContent = msg;
 }
-async function fetchText(url){
-  const res = await fetch(url, {cache:'no-store', mode:'cors'});
-  if(!res.ok) throw new Error('HTTP ' + res.status + ' for ' + url);
-  return await res.text();
-}
-function parseConstData(html){
-  const m = html.match(/const\s+DATA\s*=\s*(\[[\s\S]*?\]);/);
-  if(!m) return [];
-  const arr = JSON.parse(m[1]);
-  return normalizeRecords(arr);
-}
 function normalizeRecords(arr){
   return (Array.isArray(arr) ? arr : []).map((r, idx) => ({
     licenceNo: String(r.licenceNo ?? r.licenseNo ?? r['Licence No'] ?? r['License No'] ?? r.licence ?? r.license ?? '').trim(),
@@ -298,66 +297,21 @@ function normalizeRecords(arr){
     _idx: idx
   })).filter(r => r.licenceNo && r.name);
 }
-function parseTable(html){
-  const doc = new DOMParser().parseFromString(html, 'text/html');
-  const rows = [...doc.querySelectorAll('table tr')];
-  if(rows.length < 2) return [];
-  const headers = [...rows[0].querySelectorAll('th,td')].map(x => x.textContent.trim().toLowerCase());
-  const find = names => headers.findIndex(h => names.some(n => h.includes(n)));
-  const iLic = find(['licence','license','लाइसेन्स','लाइसेन्स नं','license no']);
-  const iName = find(['name','नाम']);
-  const iEng = find(['english']);
-  const iAddr = find(['address','ठेगाना']);
-  if(iLic < 0 || iName < 0) return [];
-  const out = [];
-  rows.slice(1).forEach((tr, idx) => {
-    const cells = [...tr.querySelectorAll('td,th')].map(x => x.textContent.trim());
-    if(cells.length){
-      out.push({licenceNo: cells[iLic] || '', name: cleanName(cells[iName] || ''), englishName: cells[iEng] || '', address: cells[iAddr] || '', _idx: idx});
+function loadData(){
+  try{
+    const source = window.ADVOCATE_DATA || [];
+    const data = normalizeRecords(source);
+    if(data.length){
+      advocateData = data;
+      setStatus(`Local advocatedata.js loaded: ${data.length.toLocaleString()} records.`, 'ok');
+      generate();
+      return;
     }
-  });
-  return normalizeRecords(out);
-}
-async function loadData(force=false){
-  if(!force){
-    try{
-      const cached = localStorage.getItem(CACHE_KEY) || localStorage.getItem('advocateOnlineDataCache.v2');
-      if(cached){
-        const arr = JSON.parse(cached);
-        if(Array.isArray(arr) && arr.length){
-          advocateData = arr;
-          const time = localStorage.getItem(CACHE_TIME_KEY) || localStorage.getItem('advocateOnlineDataCacheTime.v2');
-          setStatus(`Cached data loaded: ${arr.length.toLocaleString()} records${time ? ' (' + new Date(+time).toLocaleString() + ')' : ''}.`, 'ok');
-          generate();
-          return;
-        }
-      }
-    }catch(e){ console.warn('cache ignored', e); }
+    throw new Error('ADVOCATE_DATA empty वा invalid छ।');
+  }catch(e){
+    setStatus('Local data load failed: ' + (e && e.message ? e.message : 'unknown error'), 'bad');
+    $('outputBox').innerHTML = '<span class="error">advocatedata.js load हुन सकेन। कृपया advocatedata.js र index.html एउटै folder मा छन् कि छैनन् जाँच गर्नुहोस्।</span>';
   }
-  const userUrl = $('sourceUrl').value.trim() || DEFAULT_PAGE_URL;
-  const candidates = [...new Set([userUrl, userUrl.replace(/\/?$/, '/index.html'), RAW_URL])];
-  let lastErr = null;
-  setStatus('Online data loading... please wait.', 'info');
-  for(const url of candidates){
-    try{
-      const html = await fetchText(url);
-      let data = parseConstData(html);
-      if(!data.length) data = parseTable(html);
-      if(data.length){
-        advocateData = data;
-        try{
-          localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-          localStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
-        }catch(e){ console.warn('cache failed', e); }
-        setStatus(`Online data loaded from ${url}: ${data.length.toLocaleString()} records.`, 'ok');
-        generate();
-        return;
-      }
-      lastErr = new Error('DATA/table not found at ' + url);
-    }catch(e){ lastErr = e; }
-  }
-  setStatus('Data load failed: ' + (lastErr ? lastErr.message : 'unknown error'), 'bad');
-  $('outputBox').innerHTML = '<span class="error">Online data load हुन सकेन। यो फाइललाई internet enabled browserमा खोल्नुहोस् वा source URL जाँच गर्नुहोस्।</span>';
 }
 function lookup(lic){
   const q = normalizeLicence(lic);
@@ -369,6 +323,9 @@ function makeCustomRecord(name, idx){
 }
 function createSideOptions(selected){
   return SIDES.map(v => `<option value="${escapeHtml(v)}" ${v===selected?'selected':''}>${escapeHtml(SIDE_LABELS[v] || v)}</option>`).join('');
+}
+function createGovtRoleOptions(selected='सहायक जिल्ला न्यायाधिवक्ता'){
+  return GOVT_ROLES.map(v => `<option value="${escapeHtml(v)}" ${v===selected?'selected':''}>${escapeHtml(v)}</option>`).join('');
 }
 function addPartyBlock(side='विपक्षीको तर्फबाट', licences=''){
   partyCounter++;
@@ -385,10 +342,11 @@ function addPartyBlock(side='विपक्षीको तर्फबाट',
         <label>पक्ष / side</label>
         <select class="partySide">${createSideOptions(side)}</select>
         <input class="customSide" style="display:${side==='custom'?'block':'none'};margin-top:8px" placeholder="आफ्नो पक्ष लेख्नुहोस्" />
+        <select class="govtRole" style="display:${side===GOVT_SIDE?'block':'none'};margin-top:8px" title="नेपाल सरकारको तर्फबाट बहस गर्ने पद">${createGovtRoleOptions()}</select>
       </div>
       <div>
         <label>Licence No. / Licence Nos. / Custom Names</label>
-        <input class="licenceNos" value="${escapeHtml(licences)}" inputmode="text" placeholder="जस्तै: 14643, अधिवक्ता रमेश, वा रमेश 14643" />
+        <input class="licenceNos" value="${escapeHtml(licences)}" inputmode="text" placeholder="जस्तै: 12345, रमेश, वा  12345; रमेश" />
       </div>
       <div class="smallActions">
         <button type="button" class="btn partyGo" title="Generate output">➜</button>
@@ -414,11 +372,15 @@ function bindPartyBlock(block){
   block.querySelector('.licenceNos').addEventListener('input', () => { if($('autoGenerate').checked) generate(); });
   block.querySelector('.licenceNos').addEventListener('keydown', e => { if(e.key === 'Enter') generate(); });
   block.querySelector('.partySide').addEventListener('change', () => {
+    const sideValue = block.querySelector('.partySide').value;
     const custom = block.querySelector('.customSide');
-    custom.style.display = block.querySelector('.partySide').value === 'custom' ? 'block' : 'none';
+    const govtRole = block.querySelector('.govtRole');
+    custom.style.display = sideValue === 'custom' ? 'block' : 'none';
+    govtRole.style.display = sideValue === GOVT_SIDE ? 'block' : 'none';
     if($('autoGenerate').checked) generate(); else showOutput();
   });
   block.querySelector('.customSide').addEventListener('input', () => { if($('autoGenerate').checked) generate(); else showOutput(); });
+  block.querySelector('.govtRole').addEventListener('change', () => { if($('autoGenerate').checked) generate(); else showOutput(); });
 }
 function renumberParties(){
   document.querySelectorAll('.partyBlock').forEach((b,i) => {
@@ -456,7 +418,7 @@ function collectGroups(){
       }
     });
     if(found.length || groupMissing.length || groupDuplicates.length){
-      groups.push({ side: sideText(block), records: found, missing: groupMissing, duplicates: groupDuplicates, licences });
+      groups.push({ side: sideText(block), govtRole: selectedGovtRole(block), records: found, missing: groupMissing, duplicates: groupDuplicates, licences });
       allRecords.push(...found);
       missing.push(...groupMissing);
     }
@@ -559,7 +521,6 @@ function toast(msg){
 function escapeHtml(s){ return String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
 $('addPartyBtn').addEventListener('click', () => addPartyBlock('custom', ''));
-$('reloadBtn').addEventListener('click', () => loadData(true));
 ['includeShri','honorific','prefixText','suffixText','autoGenerate','sideConnector'].forEach(id => {
   $(id).addEventListener('input', () => showOutput());
   $(id).addEventListener('change', () => showOutput());
@@ -569,7 +530,12 @@ $('copyName').addEventListener('click', () => copyText(activeRecords.length ? jo
 $('clearBtn').addEventListener('click', () => {
   document.querySelectorAll('.partyBlock').forEach((b,i)=>{ if(i>0) b.remove(); });
   const first = document.querySelector('.partyBlock');
-  if(first){ first.querySelector('.licenceNos').value=''; first.querySelector('.partySide').value='निवेदकको तर्फबाट'; first.querySelector('.customSide').style.display='none'; }
+  if(first){
+    first.querySelector('.licenceNos').value='';
+    first.querySelector('.partySide').value='निवेदकको तर्फबाट';
+    first.querySelector('.customSide').style.display='none';
+    const govtRole = first.querySelector('.govtRole'); if(govtRole) govtRole.style.display='none';
+  }
   activeRecord=null; activeRecords=[]; missingLicences=[]; $('outputBox').textContent=''; renderRecord(null); renderMultiple([], []); renumberParties();
   first?.querySelector('.licenceNos').focus();
 });
@@ -583,9 +549,9 @@ $('alertClose').addEventListener('click', () => $('lookupAlert').classList.remov
 document.addEventListener('click', e => { if($('lookupAlert').classList.contains('show') && !$('lookupAlert').contains(e.target)) $('lookupAlert').classList.remove('show'); });
 
 document.addEventListener('DOMContentLoaded', () => {
-  addPartyBlock('निवेदकको तर्फबाट', '14643');
+  addPartyBlock('निवेदकको तर्फबाट', '');
   addPartyBlock('विपक्षीको तर्फबाट', '');
-  loadData(false);
+  loadData();
 });
 </script>
 </body>
