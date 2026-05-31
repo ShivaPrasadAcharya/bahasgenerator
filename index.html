@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ne">
+<html lang="ne" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,468 +10,369 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
     :root {
-      --bg: #f5f0eb;
-      --bg2: #ede8e1;
-      --card: #fffdf9;
-      --card2: #faf6f0;
-      --text: #1a1208;
-      --text2: #3a2e1e;
-      --muted: #7a6a52;
-      --line: #d8ccb8;
-      --line2: #e8ddd0;
-      --primary: #8b4a0c;
-      --primary-light: #b06020;
-      --primary-bg: #fef3e8;
-      --accent: #c0392b;
-      --accent2: #2e7d32;
-      --gold: #c8952a;
-      --gold-light: #f0c060;
-      --shadow-sm: 0 2px 8px rgba(100,60,10,.08);
-      --shadow: 0 8px 32px rgba(100,60,10,.12);
-      --shadow-lg: 0 20px 60px rgba(100,60,10,.16);
-      --radius: 20px;
-      --radius-sm: 12px;
-      --font-serif: 'Cormorant Garamond', 'Noto Serif Devanagari', Georgia, serif;
-      --font-sans: 'DM Sans', 'Noto Sans Devanagari', sans-serif;
+      --bg:#f5f0eb; --bg2:#ede8e1; --card:#fffdf9; --card2:#faf6f0;
+      --text:#1a1208; --text2:#3a2e1e; --muted:#7a6a52;
+      --line:#d8ccb8; --line2:#e8ddd0;
+      --primary:#8b4a0c; --primary-light:#b06020; --primary-bg:#fef3e8;
+      --accent:#c0392b; --accent2:#2e7d32;
+      --gold:#c8952a; --gold-light:#f0c060;
+      --senior:#7b2d8b; --senior-bg:#f9f0fc;
+      --warn-bg:#fff8e1; --warn-border:#f0c060; --warn-text:#7a5c00;
+      --shadow-sm:0 2px 8px rgba(100,60,10,.08);
+      --shadow:0 8px 32px rgba(100,60,10,.12);
+      --shadow-lg:0 20px 60px rgba(100,60,10,.16);
+      --radius:20px; --radius-sm:12px;
+      --font-serif:'Cormorant Garamond','Noto Serif Devanagari',Georgia,serif;
+      --font-sans:'DM Sans','Noto Sans Devanagari',sans-serif;
     }
     [data-theme="dark"] {
-      --bg: #0d0a06;
-      --bg2: #14100a;
-      --card: #1a1410;
-      --card2: #211a12;
-      --text: #f0e8d8;
-      --text2: #c8b898;
-      --muted: #8a7858;
-      --line: #3a2e1e;
-      --line2: #2a2016;
-      --primary: #e8a060;
-      --primary-light: #f0b878;
-      --primary-bg: #2a1a08;
-      --accent: #e06060;
-      --accent2: #60b870;
-      --gold: #d4a844;
-      --gold-light: #e8c870;
-      --shadow-sm: 0 2px 8px rgba(0,0,0,.3);
-      --shadow: 0 8px 32px rgba(0,0,0,.4);
-      --shadow-lg: 0 20px 60px rgba(0,0,0,.5);
+      --bg:#0d0a06; --bg2:#14100a; --card:#1a1410; --card2:#211a12;
+      --text:#f0e8d8; --text2:#c8b898; --muted:#8a7858;
+      --line:#3a2e1e; --line2:#2a2016;
+      --primary:#e8a060; --primary-light:#f0b878; --primary-bg:#2a1a08;
+      --accent:#e06060; --accent2:#60b870;
+      --gold:#d4a844; --gold-light:#e8c870;
+      --senior:#c07ad0; --senior-bg:#1e1028;
+      --warn-bg:#1e1800; --warn-border:#7a5c00; --warn-text:#e8c870;
+      --shadow-sm:0 2px 8px rgba(0,0,0,.3);
+      --shadow:0 8px 32px rgba(0,0,0,.4);
+      --shadow-lg:0 20px 60px rgba(0,0,0,.5);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      font-family: var(--font-sans);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding-top: 52px;
-      transition: background .3s, color .3s;
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family:var(--font-sans);background:var(--bg);color:var(--text);
+      min-height:100vh;padding-top:52px;
+      transition:background .3s,color .3s;
     }
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 20% -10%, rgba(200,149,42,.06), transparent),
-                  radial-gradient(ellipse 60% 40% at 80% 110%, rgba(139,74,12,.05), transparent);
-      pointer-events: none; z-index: 0;
+    body::before{
+      content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      background:radial-gradient(ellipse 80% 60% at 20% -10%,rgba(200,149,42,.06),transparent),
+                 radial-gradient(ellipse 60% 40% at 80% 110%,rgba(139,74,12,.05),transparent);
     }
 
     /* ── TOPBAR ── */
-    .topbar {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-      height: 52px;
-      background: var(--card);
-      border-bottom: 1px solid var(--line);
-      box-shadow: var(--shadow-sm);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 20px;
-      backdrop-filter: blur(12px);
+    .topbar{
+      position:fixed;top:0;left:0;right:0;z-index:1000;height:52px;
+      background:var(--card);border-bottom:1px solid var(--line);
+      box-shadow:var(--shadow-sm);
+      display:flex;align-items:center;justify-content:space-between;
+      padding:0 20px;backdrop-filter:blur(12px);
     }
-    .topbar-brand {
-      display: flex; align-items: center; gap: 10px;
-      font-family: var(--font-serif);
-      font-size: 1.18rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: -.01em;
+    .topbar-brand{
+      display:flex;align-items:center;gap:10px;
+      font-family:var(--font-serif);font-size:1.18rem;font-weight:700;
+      color:var(--primary);letter-spacing:-.01em;
     }
-    .topbar-brand .brand-icon {
-      width: 32px; height: 32px;
-      background: linear-gradient(135deg, var(--primary), var(--gold));
-      border-radius: 8px;
-      display: grid; place-items: center;
-      color: white;
-      font-size: .95rem;
-      box-shadow: 0 2px 8px rgba(139,74,12,.3);
+    .brand-icon{
+      width:32px;height:32px;border-radius:8px;
+      background:linear-gradient(135deg,var(--primary),var(--gold));
+      display:grid;place-items:center;color:white;font-size:.95rem;
+      box-shadow:0 2px 8px rgba(139,74,12,.3);
     }
-    .topbar-right { display: flex; align-items: center; gap: 8px; }
-    .topbar-link {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: .8rem; font-weight: 600; font-family: var(--font-sans);
-      color: var(--primary); text-decoration: none;
-      background: var(--primary-bg);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      padding: 5px 12px;
-      transition: all .2s;
-      letter-spacing: .01em;
+    .topbar-right{display:flex;align-items:center;gap:8px;}
+    .topbar-link{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:.8rem;font-weight:600;font-family:var(--font-sans);
+      color:var(--primary);text-decoration:none;
+      background:var(--primary-bg);border:1px solid var(--line);
+      border-radius:20px;padding:5px 12px;transition:all .2s;letter-spacing:.01em;
     }
-    .topbar-link:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
-    .topbar-link .fa { font-size: .75rem; }
-    .theme-btn {
-      width: 32px; height: 32px;
-      border: 1px solid var(--line); border-radius: 50%;
-      background: var(--card2); color: var(--muted);
-      cursor: pointer; display: grid; place-items: center;
-      font-size: .85rem; transition: all .2s;
+    .topbar-link:hover{background:var(--primary);color:white;border-color:var(--primary);transform:translateY(-1px);box-shadow:var(--shadow-sm);}
+    .theme-btn{
+      width:32px;height:32px;border:1px solid var(--line);border-radius:50%;
+      background:var(--card2);color:var(--muted);cursor:pointer;
+      display:grid;place-items:center;font-size:.85rem;transition:all .2s;
     }
-    .theme-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+    .theme-btn:hover{background:var(--primary);color:white;border-color:var(--primary);}
 
     /* ── LAYOUT ── */
-    .wrap { max-width: 980px; margin: auto; padding: 28px 16px 64px; position: relative; z-index: 1; }
+    .wrap{max-width:980px;margin:auto;padding:28px 16px 64px;position:relative;z-index:1;}
 
-    /* ── SECTION HEADER ── */
-    .section-eyebrow {
-      display: flex; align-items: center; gap: 8px;
-      font-size: .75rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 8px;
+    /* ── EYEBROW ── */
+    .section-eyebrow{
+      display:flex;align-items:center;gap:8px;
+      font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:8px;
     }
-    .section-eyebrow::before, .section-eyebrow::after {
-      content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-light), transparent);
+    .section-eyebrow::before,.section-eyebrow::after{
+      content:'';flex:1;height:1px;
+      background:linear-gradient(90deg,transparent,var(--gold-light),transparent);
     }
-    .section-eyebrow::before { flex: 0 0 32px; }
-    .section-eyebrow::after { flex: 1; }
+    .section-eyebrow::before{flex:0 0 32px;}
 
-    /* ── STATUS BAR ── */
-    .status-strip {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 16px; border-radius: 14px;
-      background: var(--card2); border: 1px solid var(--line2);
-      font-size: .875rem; color: var(--muted);
-      margin-bottom: 20px;
+    /* ── STATUS ── */
+    .status-strip{
+      display:flex;align-items:center;gap:10px;
+      padding:10px 16px;border-radius:14px;
+      background:var(--card2);border:1px solid var(--line2);
+      font-size:.875rem;color:var(--muted);margin-bottom:20px;
     }
-    .status-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--gold); flex: 0 0 auto;
-      box-shadow: 0 0 0 4px rgba(200,149,42,.15);
-      animation: pulse 2s infinite;
+    .status-dot{
+      width:8px;height:8px;border-radius:50%;flex:0 0 auto;
+      background:var(--gold);box-shadow:0 0 0 4px rgba(200,149,42,.15);
+      animation:pulse 2s infinite;
     }
-    .status-dot.good { background: var(--accent2); box-shadow: 0 0 0 4px rgba(46,125,50,.15); animation: none; }
-    .status-dot.bad { background: var(--accent); box-shadow: 0 0 0 4px rgba(192,57,43,.15); animation: none; }
-    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+    .status-dot.good{background:var(--accent2);box-shadow:0 0 0 4px rgba(46,125,50,.15);animation:none;}
+    .status-dot.bad{background:var(--accent);box-shadow:0 0 0 4px rgba(192,57,43,.15);animation:none;}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
 
     /* ── CARD ── */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--line2);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 24px;
-      position: relative;
-      overflow: hidden;
-      transition: box-shadow .2s;
+    .card{
+      background:var(--card);border:1px solid var(--line2);
+      border-radius:var(--radius);box-shadow:var(--shadow);
+      padding:24px;position:relative;overflow:hidden;
     }
-    .card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, var(--primary), var(--gold), var(--primary-light));
+    .card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,var(--primary),var(--gold),var(--primary-light));
     }
-    .card + .card { margin-top: 16px; }
 
-    /* ── FORM ELEMENTS ── */
-    label {
-      display: block; font-size: .8rem; font-weight: 600;
-      letter-spacing: .04em; text-transform: uppercase;
-      color: var(--muted); margin: 16px 0 6px;
+    /* ── FORM ── */
+    label{
+      display:block;font-size:.8rem;font-weight:600;
+      letter-spacing:.04em;text-transform:uppercase;
+      color:var(--muted);margin:16px 0 6px;
     }
-    label:first-child { margin-top: 0; }
-    input, select, textarea {
-      width: 100%;
-      border: 1.5px solid var(--line);
-      background: var(--bg2);
-      color: var(--text);
-      border-radius: var(--radius-sm);
-      padding: 11px 14px;
-      font-size: .95rem;
-      font-family: var(--font-sans);
-      outline: none;
-      transition: border .15s, box-shadow .15s, background .15s;
+    label:first-child{margin-top:0;}
+    input,select,textarea{
+      width:100%;border:1.5px solid var(--line);background:var(--bg2);color:var(--text);
+      border-radius:var(--radius-sm);padding:11px 14px;
+      font-size:.95rem;font-family:var(--font-sans);outline:none;
+      transition:border .15s,box-shadow .15s,background .15s;
     }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--primary);
-      background: var(--card);
-      box-shadow: 0 0 0 3px rgba(139,74,12,.1);
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--primary);background:var(--card);
+      box-shadow:0 0 0 3px rgba(139,74,12,.1);
     }
-    select { cursor: pointer; }
-    textarea { min-height: 72px; resize: vertical; line-height: 1.6; }
-
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-    .full { grid-column: 1 / -1; }
+    select{cursor:pointer;}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .full{grid-column:1/-1;}
 
     /* ── CHECKS ── */
-    .checks {
-      display: flex; gap: 16px; flex-wrap: wrap;
-      margin-top: 12px;
+    .checks{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;}
+    .checks label{
+      display:inline-flex;align-items:center;gap:7px;
+      margin:0;text-transform:none;letter-spacing:0;
+      font-size:.875rem;font-weight:500;color:var(--text2);cursor:pointer;
     }
-    .checks label {
-      display: inline-flex; align-items: center; gap: 7px;
-      margin: 0; text-transform: none; letter-spacing: 0;
-      font-size: .875rem; font-weight: 500; color: var(--text2);
-      cursor: pointer;
+    .checks input[type="checkbox"]{width:16px;height:16px;cursor:pointer;accent-color:var(--primary);}
+
+    /* ── ADV PANEL ── */
+    .adv-toggle-row{display:flex;align-items:center;gap:10px;margin-top:16px;}
+    .adv-toggle-btn{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:.8rem;font-weight:700;letter-spacing:.06em;
+      color:var(--primary);background:var(--primary-bg);
+      border:1.5px solid var(--line);border-radius:20px;padding:5px 14px;
+      cursor:pointer;transition:all .2s;font-family:var(--font-sans);user-select:none;
     }
-    .checks input[type="checkbox"] {
-      width: 16px; height: 16px; cursor: pointer;
-      accent-color: var(--primary);
-    }
+    .adv-toggle-btn:hover{background:var(--primary);color:white;border-color:var(--primary);}
+    .adv-toggle-btn .adv-icon{transition:transform .25s;}
+    .adv-toggle-btn.open .adv-icon{transform:rotate(45deg);}
+    .adv-divider{flex:1;height:1px;background:linear-gradient(90deg,var(--line2),transparent);}
+    .adv-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease;overflow:hidden;}
+    .adv-panel.open{grid-template-rows:1fr;}
+    .adv-panel-inner{overflow:hidden;padding-top:0;transition:padding-top .28s ease;}
+    .adv-panel.open .adv-panel-inner{padding-top:14px;}
+    .adv-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 
     /* ── PARTY BLOCKS ── */
-    .partyList { display: grid; gap: 14px; }
-    .partyBlock {
-      background: var(--card2);
-      border: 1.5px solid var(--line2);
-      border-radius: 18px;
-      padding: 16px;
-      position: relative;
-      transition: border-color .2s, box-shadow .2s;
+    .partyList{display:grid;gap:14px;}
+    .partyBlock{
+      background:var(--card2);border:1.5px solid var(--line2);
+      border-radius:18px;padding:16px;position:relative;
+      transition:border-color .2s,box-shadow .2s;
     }
-    .partyBlock:hover { border-color: var(--primary); box-shadow: var(--shadow-sm); }
-    .partyBlock::after {
-      content: '';
-      position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
-      border-radius: 18px 0 0 18px;
-      background: linear-gradient(180deg, var(--primary), var(--gold));
+    .partyBlock:hover{border-color:var(--primary);box-shadow:var(--shadow-sm);}
+    .partyBlock::after{
+      content:'';position:absolute;top:0;left:0;bottom:0;width:4px;
+      border-radius:18px 0 0 18px;
+      background:linear-gradient(180deg,var(--primary),var(--gold));
     }
+    .partyHead{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+    .partyTitle{
+      display:flex;align-items:center;gap:10px;
+      font-weight:700;color:var(--primary);
+      font-family:var(--font-serif);font-size:1.05rem;
+    }
+    .partyTitle .badge{
+      width:28px;height:28px;border-radius:50%;
+      background:linear-gradient(135deg,var(--primary),var(--gold));
+      color:white;display:grid;place-items:center;
+      font-family:var(--font-sans);font-size:.78rem;font-weight:700;
+      box-shadow:0 2px 8px rgba(139,74,12,.25);
+    }
+    .partyFields{display:grid;grid-template-columns:1.1fr 1.6fr;gap:12px;align-items:start;}
+    .remove-party-btn{
+      position:absolute;top:14px;right:14px;
+      width:28px;height:28px;border:1px solid var(--line);border-radius:50%;
+      background:transparent;color:var(--muted);cursor:pointer;
+      display:grid;place-items:center;font-size:.75rem;transition:all .2s;
+    }
+    .remove-party-btn:hover{background:var(--accent);color:white;border-color:var(--accent);}
 
-    .partyHead {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 10px; margin-bottom: 14px;
+    /* ── INLINE ALERT (below input) ── */
+    .inline-alert{
+      display:none;margin-top:6px;padding:8px 12px;
+      background:var(--warn-bg);border:1px solid var(--warn-border);
+      border-radius:10px;font-size:.8rem;color:var(--warn-text);
+      line-height:1.5;
     }
-    .partyTitle {
-      display: flex; align-items: center; gap: 10px;
-      font-weight: 700; color: var(--primary);
-      font-family: var(--font-serif); font-size: 1.05rem;
-    }
-    .partyTitle .badge {
-      width: 28px; height: 28px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--gold));
-      color: white; display: grid; place-items: center;
-      font-family: var(--font-sans); font-size: .78rem; font-weight: 700;
-      box-shadow: 0 2px 8px rgba(139,74,12,.25);
-    }
+    .inline-alert.show{display:block;}
+    .inline-alert ul{margin:4px 0 0 14px;}
+    .inline-alert li{margin-bottom:2px;}
 
-    .partyFields {
-      display: grid;
-      grid-template-columns: 1.1fr 1.6fr;
-      gap: 12px; align-items: end;
+    /* ── CONNECTOR ROW ── */
+    .connector-row{
+      display:flex;align-items:center;gap:8px;
+      margin-top:8px;padding:8px 10px;
+      background:var(--card);border:1px dashed var(--line2);border-radius:12px;
     }
-
-    .remove-party-btn {
-      position: absolute; top: 14px; right: 14px;
-      width: 28px; height: 28px;
-      border: 1px solid var(--line); border-radius: 50%;
-      background: transparent; color: var(--muted);
-      cursor: pointer; display: grid; place-items: center;
-      font-size: .75rem; transition: all .2s;
+    .connector-label{font-size:.78rem;color:var(--muted);font-weight:600;white-space:nowrap;flex:0 0 auto;}
+    .connector-select{
+      flex:1;padding:6px 10px;font-size:.85rem;
+      border:1.5px solid var(--line);background:var(--bg2);color:var(--text);
+      border-radius:10px;font-family:var(--font-sans);outline:none;transition:border .15s;
+      min-width:0;
     }
-    .remove-party-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+    .connector-select:focus{border-color:var(--primary);}
+    #connectorList{display:grid;gap:8px;margin-top:0;}
 
     /* ── ADD PARTY ── */
-    .add-party-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      margin-top: 14px;
-      border: 1.5px dashed var(--primary);
-      background: var(--primary-bg);
-      color: var(--primary);
-      font-weight: 600; font-size: .875rem;
-      border-radius: 14px; padding: 10px 16px;
-      cursor: pointer; transition: all .2s;
+    .add-party-btn{
+      display:inline-flex;align-items:center;gap:8px;margin-top:14px;
+      border:1.5px dashed var(--primary);background:var(--primary-bg);
+      color:var(--primary);font-weight:600;font-size:.875rem;
+      border-radius:14px;padding:10px 16px;cursor:pointer;transition:all .2s;
     }
-    .add-party-btn:hover { background: var(--primary); color: white; border-style: solid; transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+    .add-party-btn:hover{background:var(--primary);color:white;border-style:solid;transform:translateY(-1px);box-shadow:var(--shadow-sm);}
 
     /* ── BUTTONS ── */
-    .btn {
-      border: 0; border-radius: 12px;
-      padding: 10px 18px;
-      font-weight: 600; font-size: .875rem; font-family: var(--font-sans);
-      cursor: pointer; transition: all .18s;
-      display: inline-flex; align-items: center; gap: 7px;
-      white-space: nowrap;
+    .btn{
+      border:0;border-radius:12px;padding:10px 18px;
+      font-weight:600;font-size:.875rem;font-family:var(--font-sans);
+      cursor:pointer;transition:all .18s;
+      display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
     }
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      color: white;
-      box-shadow: 0 4px 16px rgba(139,74,12,.3);
+    .btn-primary{
+      background:linear-gradient(135deg,var(--primary),var(--primary-light));
+      color:white;box-shadow:0 4px 16px rgba(139,74,12,.3);
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139,74,12,.4); }
-    .btn-secondary {
-      background: var(--card2); color: var(--text2);
-      border: 1.5px solid var(--line); box-shadow: none;
-    }
-    .btn-secondary:hover { background: var(--bg2); border-color: var(--primary); color: var(--primary); }
-    .btn-ghost {
-      background: transparent; color: var(--muted);
-      border: 1px solid var(--line);
-    }
-    .btn-ghost:hover { background: var(--primary); color: white; border-color: var(--primary); }
-
-    .copy-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(139,74,12,.4);}
+    .btn-secondary{background:var(--card2);color:var(--text2);border:1.5px solid var(--line);}
+    .btn-secondary:hover{background:var(--bg2);border-color:var(--primary);color:var(--primary);}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--line);}
+    .btn-ghost:hover{background:var(--primary);color:white;border-color:var(--primary);}
+    .copy-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
 
     /* ── OUTPUT ── */
-    .output-wrap { position: relative; }
-    .output {
-      font-family: var(--font-serif);
-      font-size: 1.25rem;
-      line-height: 1.9;
-      padding: 20px 22px;
-      border-radius: 16px;
-      background: var(--primary-bg);
-      border: 1.5px solid var(--line);
-      min-height: 90px;
-      white-space: pre-wrap;
-      color: var(--text);
-      position: relative;
+    .output{
+      font-family:var(--font-serif);font-size:1.25rem;line-height:1.9;
+      padding:20px 22px;border-radius:16px;
+      background:var(--primary-bg);border:1.5px solid var(--line);
+      min-height:90px;white-space:pre-wrap;color:var(--text);position:relative;
     }
-    .output::before {
-      content: '\275D';
-      position: absolute; top: 10px; left: 12px;
-      font-size: 2rem; color: var(--gold); opacity: .25;
-      font-family: serif; line-height: 1;
+    .output::before{
+      content:'\275D';position:absolute;top:10px;left:12px;
+      font-size:2rem;color:var(--gold);opacity:.25;font-family:serif;line-height:1;
     }
 
-    /* ── RECORD GRID ── */
-    .record {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px; margin-top: 14px;
+    /* ── RECORD ── */
+    .record{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;}
+    .field{border:1px solid var(--line2);background:var(--card);border-radius:14px;padding:12px 14px;}
+    .field small{
+      display:flex;align-items:center;gap:5px;color:var(--muted);font-weight:600;
+      font-size:.73rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px;
     }
-    .field {
-      border: 1px solid var(--line2);
-      background: var(--card);
-      border-radius: 14px;
-      padding: 12px 14px;
-    }
-    .field small {
-      display: flex; align-items: center; gap: 5px;
-      color: var(--muted); font-weight: 600;
-      font-size: .73rem; letter-spacing: .06em; text-transform: uppercase;
-      margin-bottom: 5px;
-    }
-    .field b { font-size: .97rem; font-weight: 600; color: var(--text); }
+    .field b{font-size:.97rem;font-weight:600;color:var(--text);}
 
     /* ── MINI LIST ── */
-    .miniList {
-      margin: 14px 0 0; padding: 0; list-style: none;
-      display: grid; gap: 8px;
-    }
-    .miniList li {
-      padding: 10px 14px;
-      border: 1px solid var(--line2);
-      border-radius: 12px;
-      background: var(--card2);
-      display: flex; justify-content: space-between;
-      align-items: center; gap: 10px;
-      font-size: .875rem;
+    .miniList{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:8px;}
+    .miniList li{
+      padding:10px 14px;border:1px solid var(--line2);border-radius:12px;
+      background:var(--card2);display:flex;justify-content:space-between;
+      align-items:center;gap:10px;font-size:.875rem;
     }
 
-    .error { color: var(--accent); font-weight: 600; }
-    .ok { color: var(--accent2); font-weight: 600; }
-    .muted { color: var(--muted); }
-    .hint { font-size: .8rem; color: var(--muted); line-height: 1.55; margin-top: 6px; }
-
-    /* ── ALERT ── */
-    .alertBox {
-      display: none; position: fixed;
-      top: 64px; right: 16px; max-width: 420px;
-      z-index: 9998;
-      background: var(--card);
-      border: 1.5px solid var(--line);
-      box-shadow: var(--shadow-lg);
-      border-radius: var(--radius);
-      padding: 16px 18px;
-      animation: slideIn .2s ease-out;
-    }
-    .alertBox.show { display: block; }
-    @keyframes slideIn { from { transform: translateY(-10px) translateX(10px); opacity: 0; } to { transform: none; opacity: 1; } }
-    .alertHead {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; font-weight: 700; color: var(--accent);
-      margin-bottom: 10px; font-size: .9rem;
-    }
-    .alertHead .alert-icon { font-size: 1rem; }
-    .alertBody {
-      font-size: .875rem; line-height: 1.6; color: var(--text2);
-      max-height: 240px; overflow: auto; white-space: pre-wrap;
-    }
-    .alertClose {
-      border: 1px solid var(--line); background: var(--card2);
-      color: var(--muted); border-radius: 8px;
-      padding: 4px 8px; cursor: pointer; font-size: .8rem;
-      transition: all .15s;
-    }
-    .alertClose:hover { background: var(--accent); color: white; border-color: var(--accent); }
-
-    /* ── FLOATING SUBMIT ── */
-    .fab-wrap {
-      position: fixed;
-      bottom: 32px; right: 28px;
-      z-index: 900;
-    }
-    .fab {
-      width: 56px; height: 56px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--gold));
-      color: white; border: 0;
-      cursor: pointer;
-      display: grid; place-items: center;
-      font-size: 1.25rem;
-      box-shadow: 0 8px 24px rgba(139,74,12,.4);
-      transition: all .2s;
-    }
-    .fab:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 12px 32px rgba(139,74,12,.5); }
-    .fab:active { transform: scale(.96); }
-    .fab-label {
-      position: absolute; right: 64px; top: 50%; transform: translateY(-50%);
-      background: var(--card); color: var(--text); font-size: .8rem; font-weight: 600;
-      padding: 6px 10px; border-radius: 10px; border: 1px solid var(--line);
-      white-space: nowrap; box-shadow: var(--shadow-sm);
-      opacity: 0; transition: opacity .2s; pointer-events: none;
-    }
-    .fab-wrap:hover .fab-label { opacity: 1; }
-
-    /* ── DIVIDER ── */
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--line), transparent);
-      margin: 20px 0;
+    /* ── SENIOR TAG ── */
+    .senior-tag{
+      display:inline-flex;align-items:center;gap:4px;
+      font-size:.7rem;font-weight:700;letter-spacing:.05em;
+      color:var(--senior);background:var(--senior-bg);
+      border:1px solid color-mix(in srgb,var(--senior) 30%,transparent);
+      border-radius:20px;padding:2px 7px;vertical-align:middle;margin-left:4px;
+      font-family:var(--font-sans);
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 760px) {
-      .wrap { padding: 18px 12px 80px; }
-      .grid, .record { grid-template-columns: 1fr; }
-      .partyFields { grid-template-columns: 1fr; }
-      .copy-row .btn { flex: 1; justify-content: center; }
-      .topbar-brand span.brand-name { display: none; }
+    .error{color:var(--accent);font-weight:600;}
+    .ok{color:var(--accent2);font-weight:600;}
+    .muted{color:var(--muted);}
+    .hint{font-size:.8rem;color:var(--muted);line-height:1.55;margin-top:6px;}
+    .divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:20px 0;}
+    .ornament{text-align:center;color:var(--gold-light);font-size:1.2rem;letter-spacing:.3em;margin:4px 0 18px;opacity:.6;}
+    #outputAnchor{scroll-margin-top:72px;}
+
+    /* ── ALERT (popup) ── */
+    .alertBox{
+      display:none;position:fixed;top:64px;right:16px;max-width:420px;
+      z-index:9998;background:var(--card);border:1.5px solid var(--line);
+      box-shadow:var(--shadow-lg);border-radius:var(--radius);padding:16px 18px;
     }
+    .alertBox.show{display:block;animation:slideIn .2s ease-out;}
+    @keyframes slideIn{from{transform:translateY(-10px) translateX(10px);opacity:0}to{transform:none;opacity:1}}
+    .alertHead{
+      display:flex;align-items:center;justify-content:space-between;
+      gap:12px;font-weight:700;color:var(--accent);margin-bottom:10px;font-size:.9rem;
+    }
+    .alertBody{font-size:.875rem;line-height:1.6;color:var(--text2);max-height:240px;overflow:auto;white-space:pre-wrap;}
+    .alertClose{
+      border:1px solid var(--line);background:var(--card2);color:var(--muted);
+      border-radius:8px;padding:4px 8px;cursor:pointer;font-size:.8rem;transition:all .15s;
+    }
+    .alertClose:hover{background:var(--accent);color:white;border-color:var(--accent);}
+
+    /* ── FAB ── */
+    .fab-wrap{
+      position:fixed;right:0;top:50%;transform:translateY(-50%);
+      z-index:900;display:flex;flex-direction:column;align-items:flex-end;
+    }
+    .fab{
+      width:48px;height:48px;border-radius:12px 0 0 12px;
+      background:linear-gradient(135deg,var(--primary),var(--gold));
+      color:white;border:0;cursor:pointer;
+      display:grid;place-items:center;font-size:1.2rem;
+      box-shadow:-4px 0 16px rgba(139,74,12,.35);
+      transition:all .2s;
+    }
+    .fab:hover{width:56px;box-shadow:-6px 0 24px rgba(139,74,12,.5);}
+    .fab:active{transform:scaleX(.95);}
+    .fab-label{
+      position:absolute;right:52px;top:50%;transform:translateY(-50%);
+      background:var(--card);color:var(--text);font-size:.78rem;font-weight:600;
+      padding:5px 10px;border-radius:10px;border:1px solid var(--line);
+      white-space:nowrap;box-shadow:var(--shadow-sm);
+      opacity:0;transition:opacity .2s;pointer-events:none;
+    }
+    .fab-wrap:hover .fab-label{opacity:1;}
 
     /* ── TOAST ── */
-    .toast {
-      position: fixed; right: 16px; bottom: 16px;
-      background: var(--text); color: var(--bg);
-      padding: 10px 16px; border-radius: 12px;
-      box-shadow: var(--shadow); z-index: 9999;
-      font-weight: 600; font-size: .875rem;
-      display: flex; align-items: center; gap: 7px;
-      animation: fadeUp .2s ease-out;
+    .toast{
+      position:fixed;right:16px;bottom:16px;
+      background:var(--text);color:var(--bg);
+      padding:10px 16px;border-radius:12px;box-shadow:var(--shadow);z-index:9999;
+      font-weight:600;font-size:.875rem;
+      display:flex;align-items:center;gap:7px;animation:fadeUp .2s ease-out;
     }
-    @keyframes fadeUp { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+    @keyframes fadeUp{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
 
-    /* ── SCROLL INDICATOR ── */
-    #outputAnchor { scroll-margin-top: 72px; }
-
-    /* ── ORNAMENT ── */
-    .ornament {
-      text-align: center; color: var(--gold-light);
-      font-size: 1.2rem; letter-spacing: .3em;
-      margin: 4px 0 18px;
-      opacity: .6;
+    /* ── RESPONSIVE ── */
+    @media(max-width:760px){
+      .wrap{padding:18px 12px 80px;}
+      .grid,.record,.adv-grid{grid-template-columns:1fr;}
+      .partyFields{grid-template-columns:1fr;}
+      .copy-row .btn{flex:1;justify-content:center;}
+      .topbar-brand span.brand-name{display:none;}
+      .fab{border-radius:12px 0 0 12px;}
     }
   </style>
 </head>
@@ -485,29 +386,29 @@
   </div>
   <div class="topbar-right">
     <a class="topbar-link" href="https://shivaprasadacharya.github.io/adhivaktakokundali/" target="_blank" rel="noopener">
-      <i class="fa-solid fa-gavel fa"></i> ADVOCATES
+      <i class="fa-solid fa-gavel"></i> ADVOCATES
     </a>
     <button class="theme-btn" id="themeBtn" title="Light/Dark mode">
-      <i class="fa-solid fa-moon" id="themeIcon"></i>
+      <i class="fa-solid fa-sun" id="themeIcon"></i>
     </button>
   </div>
 </div>
 
-<!-- Alert -->
+<!-- Popup Alert -->
 <div id="lookupAlert" class="alertBox">
   <div class="alertHead">
-    <span><i class="fa-solid fa-triangle-exclamation alert-icon"></i> सूचना</span>
+    <span><i class="fa-solid fa-triangle-exclamation"></i> सूचना</span>
     <button type="button" class="alertClose" id="alertClose"><i class="fa-solid fa-xmark"></i></button>
   </div>
   <div class="alertBody" id="alertBody"></div>
 </div>
 
-<!-- Floating Action Button -->
+<!-- FAB: right-center, right arrow -->
 <div class="fab-wrap">
-  <button class="fab" id="fabBtn" title="Generate (Enter)">
+  <button class="fab" id="fabBtn" title="Generate (Ctrl+Enter)">
     <i class="fa-solid fa-arrow-right"></i>
   </button>
-  <span class="fab-label"><i class="fa-solid fa-keyboard"></i> Enter / Generate</span>
+  <span class="fab-label"><i class="fa-solid fa-keyboard"></i> Ctrl+Enter</span>
 </div>
 
 <div class="wrap">
@@ -520,62 +421,76 @@
 
   <!-- Main Card -->
   <div class="card">
-    <div class="section-eyebrow">
-      <i class="fa-solid fa-user-tie"></i>&nbsp; पक्ष तथा Licence
-    </div>
+    <div class="section-eyebrow"><i class="fa-solid fa-user-tie"></i>&nbsp; पक्ष तथा Licence</div>
     <div class="ornament">⚖ &nbsp; ◆ &nbsp; ⚖</div>
 
     <div class="grid">
+      <!-- Party list -->
       <div class="full">
         <label><i class="fa-solid fa-users" style="margin-right:5px;opacity:.6"></i>पक्ष तथा Licence No.</label>
         <div class="partyList" id="partyList"></div>
         <button type="button" class="add-party-btn" id="addPartyBtn">
           <i class="fa-solid fa-circle-plus"></i> अर्को पक्ष थप्नुहोस्
         </button>
-        <p class="hint"><i class="fa-solid fa-circle-info" style="margin-right:4px;opacity:.6"></i>धेरै Licence No. comma (,), semicolon (;), space, newline वा "र" ले छुट्याउन सकिन्छ। Nepali/English/mixed digits स्वीकारिन्छ: 12२३, १२२३, 1223</p>
+        <p class="hint">
+          <i class="fa-solid fa-circle-info" style="margin-right:4px;opacity:.6"></i>
+          धेरै Licence No. comma, semicolon, space वा newline ले छुट्याउनुहोस्।
+          Nepali/English/mixed digits: 12२३, १२३, 1223 &nbsp;|&nbsp;
+          <i class="fa-solid fa-star" style="color:var(--senior);opacity:.8"></i>
+          <strong>1234*</strong> = वरिष्ठ अधिवक्ता
+        </p>
       </div>
 
-      <div>
-        <label><i class="fa-solid fa-star" style="margin-right:5px;opacity:.6"></i>सम्बोधन / विशेषण</label>
-        <input id="honorific" value="विद्वान" />
-        <p class="hint">Mini AI ले व्यक्तिको संख्या अनुसार अधिवक्ता/द्वय/हरू स्वतः मिलाउँछ।</p>
-      </div>
-      <div>
-        <label><i class="fa-solid fa-link" style="margin-right:5px;opacity:.6"></i>पक्ष जोड्ने संयोजक</label>
-        <select id="sideConnector">
-          <option selected>तथा</option>
-          <option>र</option>
-          <option>एवं</option>
-        </select>
-      </div>
-      <div>
-        <label><i class="fa-solid fa-quote-left" style="margin-right:5px;opacity:.6"></i>वाक्य सुरु</label>
-        <input id="prefixText" value="यसमा" />
-      </div>
-      <div>
-        <label><i class="fa-solid fa-quote-right" style="margin-right:5px;opacity:.6"></i>वाक्य अन्त्य</label>
-        <input id="suffixText" value="ले गर्नुभएको बहस सुनियो।" />
+      <!-- Connector list (auto-grows with parties) -->
+      <div class="full" id="connectorSection">
+        <div id="connectorList"></div>
       </div>
 
-      <div class="full checks">
-        <label><input type="checkbox" id="includeShri" checked /> <i class="fa-solid fa-hands-praying" style="opacity:.5;margin-right:3px"></i> नाम अघि श्री राख्ने</label>
-        <label><input type="checkbox" id="autoGenerate" checked /> <i class="fa-solid fa-bolt" style="opacity:.5;margin-right:3px"></i> typing गर्दा स्वतः output</label>
+      <!-- ++ Advanced panel -->
+      <div class="full">
+        <div class="adv-toggle-row">
+          <button type="button" class="adv-toggle-btn" id="advToggleBtn">
+            <i class="fa-solid fa-plus adv-icon"></i>
+            <span class="adv-label">थप विकल्प</span>
+          </button>
+          <div class="adv-divider"></div>
+        </div>
+        <div class="adv-panel" id="advPanel">
+          <div class="adv-panel-inner">
+            <div class="adv-grid">
+              <div>
+                <label><i class="fa-solid fa-star" style="margin-right:5px;opacity:.6"></i>सम्बोधन / विशेषण</label>
+                <input id="honorific" value="विद्वान" />
+                <p class="hint">संख्या अनुसार अधिवक्ता/द्वय/हरू स्वतः मिलाउँछ।</p>
+              </div>
+              <div>
+                <label><i class="fa-solid fa-quote-left" style="margin-right:5px;opacity:.6"></i>वाक्य सुरु</label>
+                <input id="prefixText" value="यसमा" />
+              </div>
+              <div>
+                <label><i class="fa-solid fa-quote-right" style="margin-right:5px;opacity:.6"></i>वाक्य अन्त्य</label>
+                <input id="suffixText" value="ले गर्नुभएको बहस सुनियो।" />
+              </div>
+              <div class="checks" style="grid-column:1/-1">
+                <label><input type="checkbox" id="includeShri" checked />
+                  <i class="fa-solid fa-hands-praying" style="opacity:.5;margin-right:3px"></i> नाम अघि श्री राख्ने</label>
+                <label><input type="checkbox" id="autoGenerate" checked />
+                  <i class="fa-solid fa-bolt" style="opacity:.5;margin-right:3px"></i> typing गर्दा स्वतः output</label>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
+      <!-- Output -->
       <div class="full" id="outputAnchor">
         <div class="divider"></div>
         <label><i class="fa-solid fa-file-lines" style="margin-right:5px;opacity:.6"></i>Output</label>
         <div class="output" id="outputBox">Local data load भएपछि output यहाँ देखिन्छ।</div>
         <div class="copy-row">
-          <button class="btn btn-primary" id="copyOutput">
-            <i class="fa-solid fa-copy"></i> Copy Output
-          </button>
-          <button class="btn btn-secondary" id="copyName">
-            <i class="fa-solid fa-signature"></i> Copy Name Only
-          </button>
-          <button class="btn btn-ghost" id="clearBtn">
-            <i class="fa-solid fa-rotate-left"></i> Clear
-          </button>
+          <button class="btn btn-primary" id="copyOutput"><i class="fa-solid fa-copy"></i> Copy Output</button>
+          <button class="btn btn-secondary" id="copyName"><i class="fa-solid fa-signature"></i> Copy Name Only</button>
+          <button class="btn btn-ghost" id="clearBtn"><i class="fa-solid fa-rotate-left"></i> Clear</button>
         </div>
       </div>
     </div>
@@ -600,66 +515,250 @@ let activeRecords = [];
 let missingLicences = [];
 let partyCounter = 0;
 
-const SIDES = [
-  'निवेदकको तर्फबाट', 'विपक्षीको तर्फबाट', 'वादीको तर्फबाट', 'प्रतिवादीको तर्फबाट',
-  'नेपाल सरकारको तर्फबाट', 'पुनरावेदकको तर्फबाट', 'प्रत्यर्थीको तर्फबाट', 'custom'
-];
-const SIDE_LABELS = { custom: 'Custom...' };
+const CONNECTOR_OPTIONS = ['तथा','र','एवं',', (comma)','; (semicolon)'];
+// What actually gets inserted into the sentence for each connector option
+const CONNECTOR_VALUES = {'तथा':' तथा ','र':' र ','एवं':' एवं ',', (comma)':', ','; (semicolon)':'; '};
+
+const SIDES = ['निवेदकको तर्फबाट','विपक्षीको तर्फबाट','वादीको तर्फबाट','प्रतिवादीको तर्फबाट','नेपाल सरकारको तर्फबाट','पुनरावेदकको तर्फबाट','प्रत्यर्थीको तर्फबाट','custom'];
+const SIDE_LABELS = {custom:'Custom...'};
 const GOVT_SIDE = 'नेपाल सरकारको तर्फबाट';
-const GOVT_ROLES = [
-  'सहायक जिल्ला न्यायाधिवक्ता', 'जिल्ला न्यायाधिवक्ता', 'उपन्यायाधिवक्ता',
-  'सहन्यायाधिवक्ता', 'नायव महान्यायाधिवक्ता', 'महान्यायाधिवक्ता'
-];
+const GOVT_ROLES = ['सहायक जिल्ला न्यायाधिवक्ता','जिल्ला न्यायाधिवक्ता','उपन्यायाधिवक्ता','सहन्यायाधिवक्ता','नायव महान्यायाधिवक्ता','महान्यायाधिवक्ता'];
 
 const NepaliDigits = {'०':'0','१':'1','२':'2','३':'3','४':'4','५':'5','६':'6','७':'7','८':'8','९':'9'};
-function normalizeLicence(v){ return String(v??'').trim().replace(/[०-९]/g,d=>NepaliDigits[d]||d).replace(/[^0-9A-Za-z-]/g,'').toLowerCase(); }
-function cleanName(name){ return String(name||'').replace(/^\s*श्री\s+/,'').trim(); }
-function displayName(name){ const n=cleanName(name); return $('includeShri').checked&&n?'श्री '+n:n; }
-function displayRecordName(rec){ if(!rec)return''; return displayName(rec.name); }
-function isLikelyLicenceToken(value){ const raw=String(value||'').trim(); const norm=normalizeLicence(raw); if(!norm||!/[0-9]/.test(norm)||/\s/.test(raw))return false; const digitLike=/^[0-9०-९A-Za-z-]+$/.test(raw); return digitLike; }
-function stripNonNameWords(text){ return String(text||'').replace(/\b(licen[cs]e|no\.?|number|advocate|lawyer|adv\.?|sr\.?|shree|sri)\b/gi,' ').replace(/(लाइसेन्स|लाईसेन्स|लाइसेन्स\s*नं\.?|नं\.?|नम्बर|अधिवक्ता|विद्वान|श्रीमान|श्रीमती)/g,' ').replace(/\s+/g,' ').trim(); }
-function extractLicenceTokens(part){ const text=String(part||''); const tokens=[]; const seen=new Set(); const re=/[०१२३४५६७८९0-9][०१२३४५६७८९0-9A-Za-z-]*/g; let m; while((m=re.exec(text))){ const raw=m[0]; const norm=normalizeLicence(raw); if(norm&&/[0-9]/.test(norm)&&!seen.has(norm)){ seen.add(norm); tokens.push(raw); } } return tokens; }
-function parseLicenceList(value){ const text=String(value||'').trim(); if(!text)return[]; const strongParts=text.replace(/[，،؛;।]/g,',').replace(/\r?\n+/g,',').replace(/\s+र\s+/g,',').split(',').map(x=>x.trim()).filter(Boolean); const items=[]; strongParts.forEach(part=>{ const licenceTokens=extractLicenceTokens(part); if(licenceTokens.length){ const residual=stripNonNameWords(part.replace(/[०-९0-9][०-९0-9A-Za-z-]*/g,' ')); if(residual)items.push(residual); items.push(...licenceTokens); return; } const whiteParts=part.split(/\s+/).filter(Boolean); if(whiteParts.length>1&&whiteParts.every(isLikelyLicenceToken))items.push(...whiteParts); else items.push(part); }); return items; }
-function joinNepaliList(items){ const arr=(items||[]).filter(Boolean); if(arr.length===0)return''; if(arr.length===1)return arr[0]; if(arr.length===2)return arr[0]+' र '+arr[1]; return arr.slice(0,-1).join(', ')+' र '+arr[arr.length-1]; }
-function ensureTarafbat(side){ let s=String(side||'').trim(); if(!s)return''; s=s.replace(/\s+/g,' '); if(!/(को|का|की)\s+तर्फबाट$/.test(s)&&!/तर्फबाट$/.test(s)){ s=s.replace(/(को|का|की)$/,'').trim()+'को तर्फबाट'; } return s; }
-function sideText(block){ const sel=block.querySelector('.partySide'); const custom=block.querySelector('.customSide'); return ensureTarafbat(sel.value==='custom'?custom.value.trim():sel.value); }
-function selectedGovtRole(block){ const sel=block.querySelector('.partySide'); const role=block.querySelector('.govtRole'); return sel&&sel.value===GOVT_SIDE&&role?role.value.trim():''; }
-function advocateTitle(count){ if(count===1)return'अधिवक्ता'; if(count===2)return'अधिवक्ताद्वय'; return'अधिवक्ताहरू'; }
-function roleTitle(baseRole,count){ if(!baseRole)return advocateTitle(count); if(count===1)return baseRole; if(count===2)return baseRole+'द्वय'; return baseRole+'हरू'; }
-function makeGroupPhrase(group){ const names=joinNepaliList(group.records.map(displayRecordName)); const descriptor=[$('honorific').value.trim(),roleTitle(group.govtRole,group.records.length)].filter(Boolean).join(' '); const parts=[group.side,descriptor,names].filter(Boolean); return parts.join(' '); }
-function makeSentence(groups){ const valid=(groups||[]).filter(g=>g.records&&g.records.length); if(!valid.length)return''; const connector=' '+(($('sideConnector')&&$('sideConnector').value)||'तथा')+' '; return[$('prefixText').value.trim(),valid.map(makeGroupPhrase).join(connector)].filter(Boolean).join(' ')+$('suffixText').value.trim(); }
+const NepaliNums = ['','(१)','(२)','(३)','(४)','(५)','(६)','(७)','(८)','(९)'];
 
-function setStatus(msg, type='info'){
-  const dot = $('statusDot');
-  dot.className = 'status-dot' + (type==='ok'?' good': type==='bad'?' bad':'');
+// ── Connector management ─────────────────────────────────────────────
+// One connector between each pair of parties.
+// parties: 1 → 0 connectors; parties: 2 → 1 connector; parties: N → N-1 connectors
+function getConnectorValue(idx) {
+  const sel = document.getElementById('connector-' + idx);
+  if (!sel) return ' तथा ';
+  return CONNECTOR_VALUES[sel.value] || (' ' + sel.value + ' ');
+}
+
+function syncConnectors() {
+  const blocks = document.querySelectorAll('.partyBlock');
+  const n = blocks.length;
+  const needed = Math.max(0, n - 1); // connectors between parties
+  const list = $('connectorList');
+
+  // Remove excess
+  while (list.children.length > needed) list.lastChild.remove();
+
+  // Add missing
+  while (list.children.length < needed) {
+    const idx = list.children.length + 1; // 1-based: connector between party idx and idx+1
+    const row = document.createElement('div');
+    row.className = 'connector-row';
+    row.dataset.connectorIdx = idx;
+    const labelNum = NepaliNums[idx] || '(' + idx + ')';
+    row.innerHTML = `
+      <span class="connector-label"><i class="fa-solid fa-link" style="opacity:.5;margin-right:4px"></i>पक्ष जोड्ने संयोजक ${labelNum}</span>
+      <select class="connector-select" id="connector-${idx}">
+        ${CONNECTOR_OPTIONS.map(v=>`<option value="${v}"${v==='तथा'?' selected':''}>${v}</option>`).join('')}
+      </select>`;
+    row.querySelector('select').addEventListener('change', () => { if ($('autoGenerate').checked) generate(); else showOutput(); });
+    list.appendChild(row);
+  }
+
+  // Update labels (in case a party was removed from the middle)
+  Array.from(list.children).forEach((row, i) => {
+    const labelNum = NepaliNums[i+1] || '(' + (i+1) + ')';
+    row.querySelector('.connector-label').innerHTML =
+      `<i class="fa-solid fa-link" style="opacity:.5;margin-right:4px"></i>पक्ष जोड्ने संयोजक ${labelNum}`;
+    row.querySelector('select').id = 'connector-' + (i + 1);
+    row.dataset.connectorIdx = i + 1;
+  });
+
+  // Show/hide connector section
+  $('connectorSection').style.display = needed > 0 ? '' : 'none';
+}
+
+// ── Licence parsing ──────────────────────────────────────────────────
+function parseSeniorFlag(raw) {
+  const s = String(raw || '').trim();
+  if (s.endsWith('*')) return { token: s.slice(0, -1).trim(), senior: true };
+  return { token: s, senior: false };
+}
+function normalizeLicence(v) { return String(v ?? '').trim().replace(/[०-९]/g, d => NepaliDigits[d] || d).replace(/[^0-9A-Za-z-]/g, '').toLowerCase(); }
+function cleanName(name) { return String(name || '').replace(/^\s*श्री\s+/, '').trim(); }
+function displayName(name) { const n = cleanName(name); return $('includeShri').checked && n ? 'श्री ' + n : n; }
+function displayRecordName(rec) { if (!rec) return ''; return displayName(rec.name); }
+
+function isLikelyLicenceToken(value) {
+  const raw = String(value || '').trim();
+  const bare = raw.endsWith('*') ? raw.slice(0, -1).trim() : raw;
+  const norm = normalizeLicence(bare);
+  if (!norm || !/[0-9]/.test(norm) || /\s/.test(bare)) return false;
+  return /^[0-9०-९A-Za-z-]+$/.test(bare);
+}
+function stripNonNameWords(text) {
+  return String(text || '')
+    .replace(/\b(licen[cs]e|no\.?|number|advocate|lawyer|adv\.?|sr\.?|shree|sri)\b/gi, ' ')
+    .replace(/(लाइसेन्स|लाईसेन्स|लाइसेन्स\s*नं\.?|नं\.?|नम्बर|अधिवक्ता|विद्वान|श्रीमान|श्रीमती)/g, ' ')
+    .replace(/\s+/g, ' ').trim();
+}
+function extractLicenceTokens(part) {
+  const text = String(part || ''); const tokens = []; const seen = new Set();
+  const re = /[०१२३४५६७८९0-9][०१२३४५६७८९0-9A-Za-z-]*\*?/g;
+  let m;
+  while ((m = re.exec(text))) {
+    const raw = m[0]; const { token: bare } = parseSeniorFlag(raw);
+    const norm = normalizeLicence(bare);
+    if (norm && /[0-9]/.test(norm) && !seen.has(norm)) { seen.add(norm); tokens.push(raw); }
+  }
+  return tokens;
+}
+function parseLicenceList(value) {
+  const text = String(value || '').trim(); if (!text) return [];
+  const strongParts = text.replace(/[，،؛;।]/g, ',').replace(/\r?\n+/g, ',').replace(/\s+र\s+/g, ',')
+    .split(',').map(x => x.trim()).filter(Boolean);
+  const items = [];
+  strongParts.forEach(part => {
+    const licenceTokens = extractLicenceTokens(part);
+    if (licenceTokens.length) {
+      const residual = stripNonNameWords(part.replace(/[०-९0-9][०-९0-9A-Za-z-]*\*?/g, ' '));
+      if (residual) items.push(residual);
+      items.push(...licenceTokens); return;
+    }
+    const whiteParts = part.split(/\s+/).filter(Boolean);
+    if (whiteParts.length > 1 && whiteParts.every(isLikelyLicenceToken)) items.push(...whiteParts);
+    else items.push(part);
+  });
+  return items;
+}
+
+function joinNepaliList(items) {
+  const arr = (items || []).filter(Boolean);
+  if (arr.length === 0) return '';
+  if (arr.length === 1) return arr[0];
+  if (arr.length === 2) return arr[0] + ' र ' + arr[1];
+  return arr.slice(0, -1).join(', ') + ' र ' + arr[arr.length - 1];
+}
+function ensureTarafbat(side) {
+  let s = String(side || '').trim(); if (!s) return '';
+  s = s.replace(/\s+/g, ' ');
+  if (!/(को|का|की)\s+तर्फबाट$/.test(s) && !/तर्फबाट$/.test(s))
+    s = s.replace(/(को|का|की)$/, '').trim() + 'को तर्फबाट';
+  return s;
+}
+function sideText(block) {
+  const sel = block.querySelector('.partySide'), custom = block.querySelector('.customSide');
+  return ensureTarafbat(sel.value === 'custom' ? custom.value.trim() : sel.value);
+}
+function selectedGovtRole(block) {
+  const sel = block.querySelector('.partySide'), role = block.querySelector('.govtRole');
+  return sel && sel.value === GOVT_SIDE && role ? role.value.trim() : '';
+}
+
+// ── Title logic ──────────────────────────────────────────────────────
+function advocateTitle(count) { if (count === 1) return 'अधिवक्ता'; if (count === 2) return 'अधिवक्ताद्वय'; return 'अधिवक्ताहरू'; }
+function seniorTitle(count) { if (count === 1) return 'वरिष्ठ अधिवक्ता'; if (count === 2) return 'वरिष्ठ अधिवक्ताद्वय'; return 'वरिष्ठ अधिवक्ताहरू'; }
+function roleTitle(baseRole, count) { if (!baseRole) return advocateTitle(count); if (count === 1) return baseRole; if (count === 2) return baseRole + 'द्वय'; return baseRole + 'हरू'; }
+
+function sortBySeniority(records) {
+  return [...records].sort((a, b) => {
+    if (a.custom && b.custom) return 0; if (a.custom) return 1; if (b.custom) return -1;
+    const na = parseInt(normalizeLicence(a.licenceNo), 10) || Infinity;
+    const nb = parseInt(normalizeLicence(b.licenceNo), 10) || Infinity;
+    return na - nb;
+  });
+}
+
+function makeGroupPhrase(group, intraConnector) {
+  const honorific = $('honorific').value.trim();
+  const recs = group.records;
+  if (!recs.length) return '';
+
+  if (group.govtRole) {
+    const names = joinNepaliList(recs.map(displayRecordName));
+    const descriptor = [honorific, roleTitle(group.govtRole, recs.length)].filter(Boolean).join(' ');
+    return [group.side, descriptor, names].filter(Boolean).join(' ');
+  }
+
+  const allSenior = recs.every(r => r.senior), anySenior = recs.some(r => r.senior);
+  if (!anySenior) {
+    return [group.side, [honorific, advocateTitle(recs.length)].filter(Boolean).join(' '), joinNepaliList(recs.map(displayRecordName))].filter(Boolean).join(' ');
+  }
+  if (allSenior) {
+    return [group.side, [honorific, seniorTitle(recs.length)].filter(Boolean).join(' '), joinNepaliList(recs.map(displayRecordName))].filter(Boolean).join(' ');
+  }
+  // Mixed
+  const seniors = recs.filter(r => r.senior), normals = recs.filter(r => !r.senior);
+  const parts = [];
+  if (seniors.length) parts.push([[honorific, seniorTitle(seniors.length)].filter(Boolean).join(' '), joinNepaliList(seniors.map(displayRecordName))].filter(Boolean).join(' '));
+  if (normals.length) parts.push([[honorific, advocateTitle(normals.length)].filter(Boolean).join(' '), joinNepaliList(normals.map(displayRecordName))].filter(Boolean).join(' '));
+  return [group.side, parts.join(intraConnector)].filter(Boolean).join(' ');
+}
+
+function makeSentence(groups) {
+  const valid = (groups || []).filter(g => g.records && g.records.length);
+  if (!valid.length) return '';
+  const prefix = $('prefixText').value.trim();
+  const suffix = $('suffixText').value.trim();
+  // Each pair of consecutive groups gets its own connector
+  let result = makeGroupPhrase(valid[0], getConnectorValue(1));
+  for (let i = 1; i < valid.length; i++) {
+    result += getConnectorValue(i) + makeGroupPhrase(valid[i], getConnectorValue(i));
+  }
+  return [prefix, result].filter(Boolean).join(' ') + suffix;
+}
+
+// ── Data ─────────────────────────────────────────────────────────────
+function setStatus(msg, type = 'info') {
+  $('statusDot').className = 'status-dot' + (type === 'ok' ? ' good' : type === 'bad' ? ' bad' : '');
   $('statusText').innerHTML = msg;
 }
-
-function normalizeRecords(arr){ return (Array.isArray(arr)?arr:[]).map((r,idx)=>({ licenceNo:String(r.licenceNo??r.licenseNo??r['Licence No']??r['License No']??r.licence??r.license??'').trim(), name:cleanName(r.name??r.Name??r['नाम']??r['Name']??''), englishName:String(r.englishName??r['English Name']??r.EnglishName??'').trim(), address:String(r.address??r.Address??r['Address']??r['ठेगाना']??'').trim(), sex:String(r.sex??r.Sex??r['Sex']??r['लिङ्ग']??'').trim(), type:String(r.type??r.Type??r['Type']??'').trim(), issueDate:String(r.issueDate??r.Issuedate??r.IssueDate??r['Issuedate']??r['Issue Date']??'').trim(), _idx:idx })).filter(r=>r.licenceNo&&r.name); }
-
-function loadData(){
-  try{
-    const source=window.ADVOCATE_DATA||[];
-    const data=normalizeRecords(source);
-    if(data.length){ advocateData=data; setStatus(`<i class="fa-solid fa-circle-check"></i> &nbsp;Local data loaded: <strong>${data.length.toLocaleString()} records</strong>`,'ok'); generate(); return; }
+function normalizeRecords(arr) {
+  return (Array.isArray(arr) ? arr : []).map((r, idx) => ({
+    licenceNo: String(r.licenceNo ?? r.licenseNo ?? r['Licence No'] ?? r['License No'] ?? r.licence ?? r.license ?? '').trim(),
+    name: cleanName(r.name ?? r.Name ?? r['नाम'] ?? r['Name'] ?? ''),
+    englishName: String(r.englishName ?? r['English Name'] ?? r.EnglishName ?? '').trim(),
+    address: String(r.address ?? r.Address ?? r['Address'] ?? r['ठेगाना'] ?? '').trim(),
+    sex: String(r.sex ?? r.Sex ?? r['Sex'] ?? r['लिङ्ग'] ?? '').trim(),
+    type: String(r.type ?? r.Type ?? r['Type'] ?? '').trim(),
+    issueDate: String(r.issueDate ?? r.Issuedate ?? r.IssueDate ?? r['Issuedate'] ?? r['Issue Date'] ?? '').trim(),
+    _idx: idx
+  })).filter(r => r.licenceNo && r.name);
+}
+function loadData() {
+  try {
+    const source = window.ADVOCATE_DATA || [];
+    const data = normalizeRecords(source);
+    if (data.length) {
+      advocateData = data;
+      setStatus(`<i class="fa-solid fa-circle-check"></i> &nbsp;Local data loaded: <strong>${data.length.toLocaleString()} records</strong>`, 'ok');
+      generate(); return;
+    }
     throw new Error('ADVOCATE_DATA empty वा invalid छ।');
-  }catch(e){
-    setStatus('<i class="fa-solid fa-circle-xmark"></i> &nbsp;Local data load failed: '+(e&&e.message?e.message:'unknown error'),'bad');
-    $('outputBox').innerHTML='<span class="error"><i class="fa-solid fa-triangle-exclamation"></i> advocatedata.js load हुन सकेन। कृपया advocatedata.js र index.html एउटै folder मा छन् कि छैनन् जाँच गर्नुहोस्।</span>';
+  } catch (e) {
+    setStatus('<i class="fa-solid fa-circle-xmark"></i> &nbsp;Local data load failed: ' + (e && e.message ? e.message : 'unknown error'), 'bad');
+    $('outputBox').innerHTML = '<span class="error"><i class="fa-solid fa-triangle-exclamation"></i> advocatedata.js load हुन सकेन।</span>';
   }
 }
-function lookup(lic){ const q=normalizeLicence(lic); if(!q)return[]; return advocateData.filter(r=>normalizeLicence(r.licenceNo)===q); }
-function makeCustomRecord(name,idx){ return{licenceNo:'custom',name:String(name||'').trim(),custom:true,_idx:'custom-'+idx}; }
 
-function createSideOptions(selected){ return SIDES.map(v=>`<option value="${escapeHtml(v)}" ${v===selected?'selected':''}>${escapeHtml(SIDE_LABELS[v]||v)}</option>`).join(''); }
-function createGovtRoleOptions(selected='सहायक जिल्ला न्यायाधिवक्ता'){ return GOVT_ROLES.map(v=>`<option value="${escapeHtml(v)}" ${v===selected?'selected':''}>${escapeHtml(v)}</option>`).join(''); }
+// ── Lookup: if senior flag set, prefer type=वरिष्ठ अधिवक्ता records ──
+function lookup(lic, senior) {
+  const q = normalizeLicence(lic);
+  if (!q) return [];
+  const all = advocateData.filter(r => normalizeLicence(r.licenceNo) === q);
+  if (!senior || all.length === 0) return all;
+  // Prefer वरिष्ठ अधिवक्ता type if available
+  const seniorRows = all.filter(r => r.type && r.type.includes('वरिष्ठ'));
+  return seniorRows.length > 0 ? seniorRows : all;
+}
 
-function addPartyBlock(side='विपक्षीको तर्फबाट', licences=''){
+function makeCustomRecord(name, idx) { return { licenceNo: 'custom', name: String(name || '').trim(), custom: true, senior: false, _idx: 'custom-' + idx }; }
+function createSideOptions(selected) { return SIDES.map(v => `<option value="${escapeHtml(v)}" ${v === selected ? 'selected' : ''}>${escapeHtml(SIDE_LABELS[v] || v)}</option>`).join(''); }
+function createGovtRoleOptions(selected = 'सहायक जिल्ला न्यायाधिवक्ता') { return GOVT_ROLES.map(v => `<option value="${escapeHtml(v)}" ${v === selected ? 'selected' : ''}>${escapeHtml(v)}</option>`).join(''); }
+
+// ── Party blocks ──────────────────────────────────────────────────────
+function addPartyBlock(side = 'विपक्षीको तर्फबाट', licences = '') {
   partyCounter++;
-  const block=document.createElement('div');
-  block.className='partyBlock';
-  block.dataset.partyId=String(partyCounter);
-  block.innerHTML=`
+  const block = document.createElement('div');
+  block.className = 'partyBlock';
+  block.dataset.partyId = String(partyCounter);
+  block.innerHTML = `
     <button type="button" class="remove-party-btn" title="हटाउनुहोस्"><i class="fa-solid fa-xmark"></i></button>
     <div class="partyHead">
       <div class="partyTitle"><span class="badge">${partyCounter}</span><span>पक्ष ${partyCounter}</span></div>
@@ -668,185 +767,254 @@ function addPartyBlock(side='विपक्षीको तर्फबाट',
       <div>
         <label>पक्ष / Side</label>
         <select class="partySide">${createSideOptions(side)}</select>
-        <input class="customSide" style="display:${side==='custom'?'block':'none'};margin-top:8px" placeholder="आफ्नो पक्ष लेख्नुहोस्" />
-        <select class="govtRole" style="display:${side===GOVT_SIDE?'block':'none'};margin-top:8px" title="नेपाल सरकारको तर्फबाट बहस गर्ने पद">${createGovtRoleOptions()}</select>
+        <input class="customSide" style="display:${side === 'custom' ? 'block' : 'none'};margin-top:8px" placeholder="आफ्नो पक्ष लेख्नुहोस्" />
+        <select class="govtRole" style="display:${side === GOVT_SIDE ? 'block' : 'none'};margin-top:8px" title="पद">${createGovtRoleOptions()}</select>
       </div>
       <div>
         <label>Licence No(s). / Custom Names</label>
-        <input class="licenceNos" value="${escapeHtml(licences)}" inputmode="text" placeholder="जस्तै: 12345, रमेश, वा 12345; रमेश" />
+        <input class="licenceNos" value="${escapeHtml(licences)}" inputmode="text" placeholder="जस्तै: 1234, 1234* (वरिष्ठ), रमेश" />
+        <div class="inline-alert" id="inline-alert-${partyCounter}"></div>
       </div>
     </div>`;
   $('partyList').appendChild(block);
   renumberParties();
+  syncConnectors();
   bindPartyBlock(block);
-  if($('autoGenerate').checked) generate();
+  if ($('autoGenerate').checked) generate();
   return block;
 }
 
-function bindPartyBlock(block){
-  block.querySelector('.remove-party-btn').addEventListener('click',()=>{
-    if(document.querySelectorAll('.partyBlock').length<=1){ block.querySelector('.licenceNos').value=''; }
-    else{ block.remove(); renumberParties(); }
+function bindPartyBlock(block) {
+  block.querySelector('.remove-party-btn').addEventListener('click', () => {
+    if (document.querySelectorAll('.partyBlock').length <= 1) { block.querySelector('.licenceNos').value = ''; }
+    else { block.remove(); renumberParties(); syncConnectors(); }
     generate();
   });
-  block.querySelector('.licenceNos').addEventListener('input',()=>{ if($('autoGenerate').checked) generate(); });
-  block.querySelector('.licenceNos').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); generateAndScroll(); } });
-  block.querySelector('.partySide').addEventListener('change',()=>{
-    const sv=block.querySelector('.partySide').value;
-    const custom=block.querySelector('.customSide');
-    const govtRole=block.querySelector('.govtRole');
-    custom.style.display=sv==='custom'?'block':'none';
-    govtRole.style.display=sv===GOVT_SIDE?'block':'none';
-    if($('autoGenerate').checked) generate(); else showOutput();
+  block.querySelector('.licenceNos').addEventListener('input', () => { if ($('autoGenerate').checked) generate(); });
+  block.querySelector('.licenceNos').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); generateAndScroll(); } });
+  block.querySelector('.partySide').addEventListener('change', () => {
+    const sv = block.querySelector('.partySide').value;
+    block.querySelector('.customSide').style.display = sv === 'custom' ? 'block' : 'none';
+    block.querySelector('.govtRole').style.display = sv === GOVT_SIDE ? 'block' : 'none';
+    if ($('autoGenerate').checked) generate(); else showOutput();
   });
-  block.querySelector('.customSide').addEventListener('input',()=>{ if($('autoGenerate').checked) generate(); else showOutput(); });
-  block.querySelector('.govtRole').addEventListener('change',()=>{ if($('autoGenerate').checked) generate(); else showOutput(); });
+  block.querySelector('.customSide').addEventListener('input', () => { if ($('autoGenerate').checked) generate(); else showOutput(); });
+  block.querySelector('.govtRole').addEventListener('change', () => { if ($('autoGenerate').checked) generate(); else showOutput(); });
 }
 
-function renumberParties(){
-  document.querySelectorAll('.partyBlock').forEach((b,i)=>{
-    b.querySelector('.badge').textContent=i+1;
-    b.querySelector('.partyTitle span:last-child').textContent='पक्ष '+(i+1);
-    const removeBtn=b.querySelector('.remove-party-btn');
-    removeBtn.style.display=document.querySelectorAll('.partyBlock').length>1?'grid':'none';
+function renumberParties() {
+  const all = document.querySelectorAll('.partyBlock');
+  all.forEach((b, i) => {
+    b.querySelector('.badge').textContent = i + 1;
+    b.querySelector('.partyTitle span:last-child').textContent = 'पक्ष ' + (i + 1);
+    b.querySelector('.remove-party-btn').style.display = all.length > 1 ? 'grid' : 'none';
+    // Re-sync inline-alert id
+    const alertEl = b.querySelector('.inline-alert');
+    if (alertEl) alertEl.id = 'inline-alert-' + (i + 1);
   });
 }
 
-function collectGroups(){
-  const groups=[]; const allRecords=[]; const missing=[]; const duplicates=[];
-  document.querySelectorAll('.partyBlock').forEach(block=>{
-    const licences=parseLicenceList(block.querySelector('.licenceNos').value);
-    if(!licences.length)return;
-    const found=[]; const groupMissing=[]; const groupDuplicates=[];
-    licences.forEach((lic,idx)=>{
-      if(isLikelyLicenceToken(lic)){ const q=normalizeLicence(lic); const matches=lookup(lic); if(matches.length===1){ found.push(matches[0]); } else if(matches.length>1){ const d={licence:lic,normalized:q,matches}; groupDuplicates.push(d); duplicates.push(d); } else { groupMissing.push(lic); } }
-      else{ found.push(makeCustomRecord(lic,idx)); }
-    });
-    if(found.length||groupMissing.length||groupDuplicates.length){ groups.push({side:sideText(block),govtRole:selectedGovtRole(block),records:found,missing:groupMissing,duplicates:groupDuplicates,licences}); allRecords.push(...found); missing.push(...groupMissing); }
-  });
-  return{groups,allRecords,missing,duplicates};
-}
-
-function renderRecord(rec){
-  const box=$('recordBox');
-  if(!rec){box.style.display='none';box.innerHTML='';return;}
-  box.style.display='grid';
-  box.innerHTML=`
-    <div class="field"><small><i class="fa-solid fa-hashtag"></i> Licence No.</small><b>${escapeHtml(rec.custom?'Custom Name':rec.licenceNo)}</b></div>
-    <div class="field"><small><i class="fa-solid fa-user"></i> नेपाली नाम</small><b>${escapeHtml(displayRecordName(rec))}</b></div>
-    <div class="field"><small><i class="fa-solid fa-language"></i> English Name</small><b>${escapeHtml(rec.custom?'—':(rec.englishName||'—'))}</b></div>
-    <div class="field"><small><i class="fa-solid fa-location-dot"></i> Address</small><b>${escapeHtml(rec.address||'—')}</b></div>
-    <div class="field"><small><i class="fa-solid fa-venus-mars"></i> Sex</small><b>${escapeHtml(rec.sex||'—')}</b></div>
-    <div class="field"><small><i class="fa-regular fa-calendar"></i> Issue Date</small><b>${escapeHtml(rec.issueDate||'—')}</b></div>`;
-}
-
-function renderMultiple(groups,missing=[]){
-  const ul=$('multiBox'); const items=[];
-  groups.forEach(g=>{
-    if(g.records.length) items.push(`<li><strong>${escapeHtml(g.side||'पक्ष')}</strong> — ${escapeHtml(joinNepaliList(g.records.map(displayRecordName)))}</li>`);
-    g.missing.forEach(lic=>items.push(`<li><span class="error"><i class="fa-solid fa-circle-xmark"></i> ${escapeHtml(g.side||'पक्ष')}: ${escapeHtml(lic)} — नाम भेटिएन</span></li>`));
-    (g.duplicates||[]).forEach(d=>items.push(`<li><span class="error"><i class="fa-solid fa-copy"></i> ${escapeHtml(g.side||'पक्ष')}: ${escapeHtml(d.licence)} — एउटै licence no. धेरै जनामा भेटियो</span></li>`));
-  });
-  if(items.length<=1){ul.style.display='none';ul.innerHTML='';return;}
-  ul.style.display='grid'; ul.innerHTML=items.join('');
-}
-
-function buildAlertMessage(collected){
-  const lines=[];
-  if(collected.missing&&collected.missing.length){ lines.push('नाम नभेटिएका Licence No.: '+collected.missing.join(', ')); }
-  if(collected.duplicates&&collected.duplicates.length){ lines.push(''); lines.push('एउटै Licence No. धेरै जनामा भेटियो; अस्पष्ट भएकाले output मा नसमावेश गरिएको छ:'); collected.duplicates.forEach(d=>{const names=d.matches.map(r=>`${displayRecordName(r)} (${r.licenceNo})`).join(', '); lines.push(`• ${d.licence}: ${names}`);}); }
-  return lines.join('\n');
-}
-
-let lastAlertSignature='';
-function showLookupAlert(collected){
-  const msg=buildAlertMessage(collected); const box=$('lookupAlert');
-  if(!msg){box.classList.remove('show');$('alertBody').textContent='';lastAlertSignature='';return;}
-  $('alertBody').textContent=msg+'\n\nबाँकी valid inputs का आधारमा output generate गरिएको छ।';
-  box.classList.add('show');
-  const sig=msg;
-  if(sig!==lastAlertSignature){ lastAlertSignature=sig; setTimeout(()=>box.classList.remove('show'),8500); }
-}
-
-function showOutput(groupsCache=null){
-  const collected=groupsCache||collectGroups();
-  activeRecords=collected.allRecords; activeRecord=activeRecords[0]||null; missingLicences=collected.missing;
-  renderRecord(activeRecord); renderMultiple(collected.groups,collected.missing); showLookupAlert(collected);
-  if(!collected.groups.length){$('outputBox').textContent='';return;}
-  const sentence=makeSentence(collected.groups);
-  if(sentence){
-    $('outputBox').textContent=sentence;
-    const notes=[];
-    if(collected.missing.length)notes.push(`${collected.missing.join(', ')} का लागि नाम भेटिएन`);
-    if(collected.duplicates&&collected.duplicates.length)notes.push(`${collected.duplicates.map(d=>d.licence).join(', ')} एउटै licence no. धेरै जनामा भेटियो`);
-    if(notes.length)$('outputBox').textContent+=`\n\nनोट: ${notes.join('; ')}।`;
+// ── Inline alerts per party ───────────────────────────────────────────
+function updateInlineAlert(blockIndex, missing, dups) {
+  const el = document.getElementById('inline-alert-' + blockIndex);
+  if (!el) return;
+  const msgs = [];
+  if (missing.length) msgs.push('<b><i class="fa-solid fa-circle-xmark"></i> नाम नभेटिएका:</b> ' + missing.map(escapeHtml).join(', '));
+  if (dups.length) msgs.push('<b><i class="fa-solid fa-copy"></i> एउटै No. धेरैमा:</b> ' + dups.map(d => escapeHtml(d.licence)).join(', '));
+  if (msgs.length) {
+    el.innerHTML = msgs.join('<br>');
+    el.classList.add('show');
   } else {
-    $('outputBox').innerHTML=`<span class="error"><i class="fa-solid fa-triangle-exclamation"></i> दिइएका Licence No. का लागि स्पष्ट नाम भेटिएन। बाँकी valid inputs भए पुनः प्रयास गर्नुहोस्।</span>`;
+    el.innerHTML = '';
+    el.classList.remove('show');
   }
 }
 
-function generate(){
-  if(!advocateData.length){ $('outputBox').innerHTML='<span class="muted"><i class="fa-solid fa-spinner fa-spin"></i> Data loading...</span>'; return; }
+// ── Collect groups ────────────────────────────────────────────────────
+function collectGroups() {
+  const groups = [], allRecords = [], missing = [], duplicates = [];
+  document.querySelectorAll('.partyBlock').forEach((block, bi) => {
+    const licences = parseLicenceList(block.querySelector('.licenceNos').value);
+    const blockIdx = bi + 1;
+    if (!licences.length) { updateInlineAlert(blockIdx, [], []); return; }
+    const found = [], groupMissing = [], groupDuplicates = [];
+    licences.forEach((lic, idx) => {
+      if (isLikelyLicenceToken(lic)) {
+        const { token: bare, senior } = parseSeniorFlag(lic);
+        const q = normalizeLicence(bare);
+        const matches = lookup(bare, senior);
+        if (matches.length === 1) {
+          found.push({ ...matches[0], senior });
+        } else if (matches.length > 1) {
+          const d = { licence: lic, normalized: q, matches, senior };
+          groupDuplicates.push(d); duplicates.push(d);
+        } else {
+          groupMissing.push(lic);
+        }
+      } else {
+        found.push(makeCustomRecord(lic, idx));
+      }
+    });
+    updateInlineAlert(blockIdx, groupMissing, groupDuplicates);
+    const sorted = sortBySeniority(found);
+    if (sorted.length || groupMissing.length || groupDuplicates.length) {
+      groups.push({ side: sideText(block), govtRole: selectedGovtRole(block), records: sorted, missing: groupMissing, duplicates: groupDuplicates, licences });
+      allRecords.push(...sorted);
+      missing.push(...groupMissing);
+    }
+  });
+  return { groups, allRecords, missing, duplicates };
+}
+
+// ── Render ────────────────────────────────────────────────────────────
+function renderRecord(rec) {
+  const box = $('recordBox');
+  if (!rec) { box.style.display = 'none'; box.innerHTML = ''; return; }
+  box.style.display = 'grid';
+  const seniorHtml = rec.senior ? `<span class="senior-tag"><i class="fa-solid fa-star"></i> वरिष्ठ</span>` : '';
+  box.innerHTML = `
+    <div class="field"><small><i class="fa-solid fa-hashtag"></i> Licence No.</small><b>${escapeHtml(rec.custom ? 'Custom Name' : rec.licenceNo)}${seniorHtml}</b></div>
+    <div class="field"><small><i class="fa-solid fa-user"></i> नेपाली नाम</small><b>${escapeHtml(displayRecordName(rec))}</b></div>
+    <div class="field"><small><i class="fa-solid fa-language"></i> English Name</small><b>${escapeHtml(rec.custom ? '—' : (rec.englishName || '—'))}</b></div>
+    <div class="field"><small><i class="fa-solid fa-location-dot"></i> Address</small><b>${escapeHtml(rec.address || '—')}</b></div>
+    <div class="field"><small><i class="fa-solid fa-venus-mars"></i> Sex</small><b>${escapeHtml(rec.sex || '—')}</b></div>
+    <div class="field"><small><i class="fa-regular fa-calendar"></i> Issue Date</small><b>${escapeHtml(rec.issueDate || '—')}</b></div>`;
+}
+
+function renderMultiple(groups, missing = []) {
+  const ul = $('multiBox'); const items = [];
+  groups.forEach(g => {
+    if (g.records.length) {
+      const nameList = g.records.map(r => (r.senior ? '★' : '') + displayRecordName(r));
+      items.push(`<li><strong>${escapeHtml(g.side || 'पक्ष')}</strong> — ${escapeHtml(joinNepaliList(nameList))}</li>`);
+    }
+    g.missing.forEach(lic => items.push(`<li><span class="error"><i class="fa-solid fa-circle-xmark"></i> ${escapeHtml(g.side || 'पक्ष')}: ${escapeHtml(lic)} — नाम भेटिएन</span></li>`));
+    (g.duplicates || []).forEach(d => items.push(`<li><span class="error"><i class="fa-solid fa-copy"></i> ${escapeHtml(g.side || 'पक्ष')}: ${escapeHtml(d.licence)} — एउटै licence no. धेरै जनामा</span></li>`));
+  });
+  if (items.length <= 1) { ul.style.display = 'none'; ul.innerHTML = ''; return; }
+  ul.style.display = 'grid'; ul.innerHTML = items.join('');
+}
+
+function buildAlertMessage(collected) {
+  const lines = [];
+  if (collected.missing && collected.missing.length) lines.push('नाम नभेटिएका Licence No.: ' + collected.missing.join(', '));
+  if (collected.duplicates && collected.duplicates.length) {
+    lines.push('');
+    lines.push('एउटै Licence No. धेरै जनामा भेटियो:');
+    collected.duplicates.forEach(d => {
+      const names = d.matches.map(r => `${displayRecordName(r)} (${r.licenceNo})`).join(', ');
+      lines.push(`• ${d.licence}: ${names}`);
+    });
+  }
+  return lines.join('\n');
+}
+
+let lastAlertSig = '';
+function showLookupAlert(collected) {
+  const msg = buildAlertMessage(collected); const box = $('lookupAlert');
+  if (!msg) { box.classList.remove('show'); $('alertBody').textContent = ''; lastAlertSig = ''; return; }
+  $('alertBody').textContent = msg + '\n\nबाँकी valid inputs का आधारमा output generate गरिएको छ।';
+  box.classList.add('show');
+  if (msg !== lastAlertSig) { lastAlertSig = msg; setTimeout(() => box.classList.remove('show'), 8500); }
+}
+
+function showOutput(groupsCache = null) {
+  const collected = groupsCache || collectGroups();
+  activeRecords = collected.allRecords; activeRecord = activeRecords[0] || null; missingLicences = collected.missing;
+  renderRecord(activeRecord); renderMultiple(collected.groups, collected.missing); showLookupAlert(collected);
+  if (!collected.groups.length) { $('outputBox').textContent = ''; return; }
+  const sentence = makeSentence(collected.groups);
+  if (sentence) {
+    $('outputBox').textContent = sentence;
+    const notes = [];
+    if (collected.missing.length) notes.push(`${collected.missing.join(', ')} का लागि नाम भेटिएन`);
+    if (collected.duplicates && collected.duplicates.length) notes.push(`${collected.duplicates.map(d => d.licence).join(', ')} एउटै licence no. धेरै जनामा भेटियो`);
+    if (notes.length) $('outputBox').textContent += `\n\nनोट: ${notes.join('; ')}।`;
+  } else {
+    $('outputBox').innerHTML = `<span class="error"><i class="fa-solid fa-triangle-exclamation"></i> दिइएका Licence No. का लागि स्पष्ट नाम भेटिएन।</span>`;
+  }
+}
+
+function generate() {
+  if (!advocateData.length) { $('outputBox').innerHTML = '<span class="muted"><i class="fa-solid fa-spinner fa-spin"></i> Data loading...</span>'; return; }
   showOutput();
 }
-
-function generateAndScroll(){
+function generateAndScroll() {
   generate();
-  setTimeout(()=>{ $('outputAnchor').scrollIntoView({behavior:'smooth',block:'start'}); },100);
+  setTimeout(() => $('outputAnchor').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
 }
 
-function copyText(text){
-  if(!text)return;
-  navigator.clipboard.writeText(text).then(()=>toast('<i class="fa-solid fa-check"></i> Copied!')).catch(()=>{
-    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('<i class="fa-solid fa-check"></i> Copied!');
-  });
+function copyText(text) {
+  if (!text) return;
+  navigator.clipboard.writeText(text)
+    .then(() => toast('<i class="fa-solid fa-check"></i> Copied!'))
+    .catch(() => { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); toast('<i class="fa-solid fa-check"></i> Copied!'); });
 }
 
 let toastTimer;
-function toast(html){
+function toast(html) {
   clearTimeout(toastTimer);
-  const old=document.getElementById('toastMsg');if(old)old.remove();
-  const d=document.createElement('div');d.id='toastMsg';d.className='toast';d.innerHTML=html;
-  document.body.appendChild(d);toastTimer=setTimeout(()=>d.remove(),2000);
+  const old = document.getElementById('toastMsg'); if (old) old.remove();
+  const d = document.createElement('div'); d.id = 'toastMsg'; d.className = 'toast'; d.innerHTML = html;
+  document.body.appendChild(d); toastTimer = setTimeout(() => d.remove(), 2000);
 }
-function escapeHtml(s){ return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function escapeHtml(s) { return String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+// ── Advanced panel toggle ─────────────────────────────────────────────
+$('advToggleBtn').addEventListener('click', () => {
+  const btn = $('advToggleBtn'), panel = $('advPanel');
+  const open = panel.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  btn.querySelector('.adv-label').textContent = open ? 'थप विकल्प बन्द' : 'थप विकल्प';
+});
 
 // FAB
 $('fabBtn').addEventListener('click', generateAndScroll);
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); generateAndScroll(); } });
 
-// Keyboard: Enter anywhere → generate+scroll (except in textarea/select/input that has its own handler)
-document.addEventListener('keydown', e => {
-  if(e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); generateAndScroll(); }
+// Add party
+$('addPartyBtn').addEventListener('click', () => addPartyBlock('custom', ''));
+
+// Settings listeners
+['includeShri', 'honorific', 'prefixText', 'suffixText', 'autoGenerate'].forEach(id => {
+  $(id).addEventListener('input', () => showOutput());
+  $(id).addEventListener('change', () => showOutput());
 });
 
-$('addPartyBtn').addEventListener('click',()=>addPartyBlock('custom',''));
-['includeShri','honorific','prefixText','suffixText','autoGenerate','sideConnector'].forEach(id=>{
-  $(id).addEventListener('input',()=>showOutput());
-  $(id).addEventListener('change',()=>showOutput());
-});
-$('copyOutput').addEventListener('click',()=>copyText($('outputBox').textContent.trim()));
-$('copyName').addEventListener('click',()=>copyText(activeRecords.length?joinNepaliList(activeRecords.map(displayRecordName)):''));
-$('clearBtn').addEventListener('click',()=>{
-  document.querySelectorAll('.partyBlock').forEach((b,i)=>{ if(i>0)b.remove(); });
-  const first=document.querySelector('.partyBlock');
-  if(first){ first.querySelector('.licenceNos').value=''; first.querySelector('.partySide').value='निवेदकको तर्फबाट'; first.querySelector('.customSide').style.display='none'; const gr=first.querySelector('.govtRole');if(gr)gr.style.display='none'; }
-  activeRecord=null;activeRecords=[];missingLicences=[];
-  $('outputBox').textContent='';renderRecord(null);renderMultiple([],[]);renumberParties();
+$('copyOutput').addEventListener('click', () => copyText($('outputBox').textContent.trim()));
+$('copyName').addEventListener('click', () => copyText(activeRecords.length ? joinNepaliList(activeRecords.map(displayRecordName)) : ''));
+
+$('clearBtn').addEventListener('click', () => {
+  document.querySelectorAll('.partyBlock').forEach((b, i) => { if (i > 0) b.remove(); });
+  const first = document.querySelector('.partyBlock');
+  if (first) {
+    first.querySelector('.licenceNos').value = '';
+    first.querySelector('.partySide').value = 'निवेदकको तर्फबाट';
+    first.querySelector('.customSide').style.display = 'none';
+    const gr = first.querySelector('.govtRole'); if (gr) gr.style.display = 'none';
+    const al = first.querySelector('.inline-alert'); if (al) { al.innerHTML = ''; al.classList.remove('show'); }
+  }
+  activeRecord = null; activeRecords = []; missingLicences = [];
+  $('outputBox').textContent = ''; renderRecord(null); renderMultiple([], []);
+  renumberParties(); syncConnectors();
   first?.querySelector('.licenceNos').focus();
 });
 
-$('themeBtn').addEventListener('click',()=>{
-  const dark=document.documentElement.getAttribute('data-theme')==='dark';
-  document.documentElement.setAttribute('data-theme',dark?'light':'dark');
-  $('themeIcon').className=dark?'fa-solid fa-moon':'fa-solid fa-sun';
+$('themeBtn').addEventListener('click', () => {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+  $('themeIcon').className = dark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
 });
 
-$('alertClose').addEventListener('click',()=>$('lookupAlert').classList.remove('show'));
-document.addEventListener('click',e=>{ if($('lookupAlert').classList.contains('show')&&!$('lookupAlert').contains(e.target))$('lookupAlert').classList.remove('show'); });
+$('alertClose').addEventListener('click', () => $('lookupAlert').classList.remove('show'));
+document.addEventListener('click', e => {
+  if ($('lookupAlert').classList.contains('show') && !$('lookupAlert').contains(e.target))
+    $('lookupAlert').classList.remove('show');
+});
 
-document.addEventListener('DOMContentLoaded',()=>{
-  addPartyBlock('निवेदकको तर्फबाट','');
-  addPartyBlock('विपक्षीको तर्फबाट','');
+document.addEventListener('DOMContentLoaded', () => {
+  addPartyBlock('निवेदकको तर्फबाट', '');
+  addPartyBlock('विपक्षीको तर्फबाट', '');
   loadData();
 });
 </script>
