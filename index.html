@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ne" data-theme="dark">
+<html lang="ne" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -77,6 +77,13 @@
       background:var(--primary-bg);border:1px solid var(--line);
       border-radius:20px;padding:5px 12px;transition:all .2s;letter-spacing:.01em;
     }
+    .style-select{
+      font-family:var(--font-sans);font-size:.85rem;
+      padding:7px 10px;border-radius:16px;border:1px solid var(--line);
+      background:var(--card2);color:var(--text);cursor:pointer;
+      transition:border .15s,background .15s;
+    }
+    .style-select:hover{border-color:var(--primary);}
     .topbar-link:hover{background:var(--primary);color:white;border-color:var(--primary);transform:translateY(-1px);box-shadow:var(--shadow-sm);}
     .theme-btn{
       width:32px;height:32px;border:1px solid var(--line);border-radius:50%;
@@ -143,6 +150,26 @@
     input:focus,select:focus,textarea:focus{
       border-color:var(--primary);background:var(--card);
       box-shadow:0 0 0 3px rgba(139,74,12,.1);
+    }
+    /* Licence input: light orange as requested */
+    input.licenceNos{
+      background:#fff3e0;
+      border-color:#e8a060;
+      color:#1a1208;
+    }
+    input.licenceNos:focus{
+      background:#fff7ed;
+      border-color:var(--primary);
+      box-shadow:0 0 0 3px rgba(232,160,96,.22);
+    }
+    [data-theme="dark"] input.licenceNos{
+      background:#3a2412;
+      border-color:#8b4a0c;
+      color:#f0e8d8;
+    }
+    [data-theme="dark"] input.licenceNos:focus{
+      background:#432814;
+      border-color:var(--primary);
     }
     select{cursor:pointer;}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
@@ -331,6 +358,7 @@
     }
     .alertClose:hover{background:var(--accent);color:white;border-color:var(--accent);}
 
+    html{scroll-behavior:smooth;}
     /* ── FAB ── */
     .fab-wrap{
       position:fixed;right:0;top:50%;transform:translateY(-50%);
@@ -354,6 +382,17 @@
       opacity:0;transition:opacity .2s;pointer-events:none;
     }
     .fab-wrap:hover .fab-label{opacity:1;}
+
+    .scroll-link{
+      position:fixed;right:16px;z-index:950;
+      width:44px;height:44px;border-radius:50%;
+      background:linear-gradient(135deg,var(--primary),var(--gold));
+      color:white;display:grid;place-items:center;text-decoration:none;
+      box-shadow:0 10px 24px rgba(0,0,0,.22);transition:transform .2s,box-shadow .2s;
+    }
+    .scroll-link:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(0,0,0,.28);}
+    .back-top{bottom:16px;}
+    .go-bottom{bottom:80px;}
 
     /* ── TOAST ── */
     .toast{
@@ -379,7 +418,7 @@
 <body>
 
 <!-- Topbar -->
-<div class="topbar">
+<div class="topbar" id="topAnchor">
   <div class="topbar-brand">
     <div class="brand-icon"><i class="fa-solid fa-scale-balanced"></i></div>
     <span class="brand-name">अधिवक्ता Licence Lookup</span>
@@ -388,6 +427,10 @@
     <a class="topbar-link" href="https://shivaprasadacharya.github.io/adhivaktakokundali/" target="_blank" rel="noopener">
       <i class="fa-solid fa-gavel"></i> ADVOCATES
     </a>
+    <select id="styleMode" class="style-select" title="Output style">
+      <option value="style1">Style 1</option>
+      <option value="style2">Style 2</option>
+    </select>
     <button class="theme-btn" id="themeBtn" title="Light/Dark mode">
       <i class="fa-solid fa-sun" id="themeIcon"></i>
     </button>
@@ -410,6 +453,8 @@
   </button>
   <span class="fab-label"><i class="fa-solid fa-keyboard"></i> Ctrl+Enter</span>
 </div>
+<a href="#outputAnchor" id="goBottomBtn" class="scroll-link go-bottom" title="Go to bottom"><i class="fa-solid fa-arrow-down"></i></a>
+<a href="#topAnchor" id="backTopBtn" class="scroll-link back-top" title="Back to top"><i class="fa-solid fa-arrow-up"></i></a>
 
 <div class="wrap">
 
@@ -441,11 +486,6 @@
         </p>
       </div>
 
-      <!-- Connector list (auto-grows with parties) -->
-      <div class="full" id="connectorSection">
-        <div id="connectorList"></div>
-      </div>
-
       <!-- ++ Advanced panel -->
       <div class="full">
         <div class="adv-toggle-row">
@@ -465,7 +505,7 @@
               </div>
               <div>
                 <label><i class="fa-solid fa-quote-left" style="margin-right:5px;opacity:.6"></i>वाक्य सुरु</label>
-                <input id="prefixText" value="यसमा" />
+                <input id="prefixText" value="" placeholder="(खाली भएमा स्वतः चयन गरिन्छ)" />
               </div>
               <div>
                 <label><i class="fa-solid fa-quote-right" style="margin-right:5px;opacity:.6"></i>वाक्य अन्त्य</label>
@@ -477,6 +517,9 @@
                 <label><input type="checkbox" id="autoGenerate" checked />
                   <i class="fa-solid fa-bolt" style="opacity:.5;margin-right:3px"></i> typing गर्दा स्वतः output</label>
               </div>
+            </div>
+            <div class="full" id="connectorSection">
+              <div id="connectorList"></div>
             </div>
           </div>
         </div>
@@ -515,17 +558,57 @@ let activeRecords = [];
 let missingLicences = [];
 let partyCounter = 0;
 
+const STYLE_MODE = { DEFAULT: 'style1', PARTY: 'style2' };
+const SIDES_STYLE1 = ['निवेदकको तर्फबाट','विपक्षीको तर्फबाट','वादीको तर्फबाट','प्रतिवादीको तर्फबाट','नेपाल सरकारको तर्फबाट','पुनरावेदकको तर्फबाट','प्रत्यर्थीको तर्फबाट','custom'];
+const SIDES_STYLE2 = ['निवेदक','निवेदकको वारेस','निवेदक वादीको तर्फबाट','निवेदक प्रतिवादीको तर्फबाट','निवेदक नेपाल सरकारको तर्फबाट','विपक्षी','वादी','वादीको वारेस','प्रतिवादी','प्रतिवादीको वारेस','पुनरावेदक','पुनरावेदक वारेस','प्रत्यर्थी','प्रत्यर्थीको वारेस','custom'];
+function getActiveSides() { return $('styleMode')?.value === STYLE_MODE.PARTY ? SIDES_STYLE2 : SIDES_STYLE1; }
+const SIDE_LABELS = {custom:'Custom...'};
+const GOVT_SIDE = 'नेपाल सरकारको तर्फबाट';
+const GOVT_ROLES = ['सहायक जिल्ला न्यायाधिवक्ता','जिल्ला न्यायाधिवक्ता','उपन्यायाधिवक्ता','सहन्यायाधिवक्ता','नायव महान्यायाधिवक्ता','महान्यायाधिवक्ता'];
 const CONNECTOR_OPTIONS = ['तथा','र','एवं',', (comma)','; (semicolon)'];
 // What actually gets inserted into the sentence for each connector option
 const CONNECTOR_VALUES = {'तथा':' तथा ','र':' र ','एवं':' एवं ',', (comma)':', ','; (semicolon)':'; '};
 
-const SIDES = ['निवेदकको तर्फबाट','विपक्षीको तर्फबाट','वादीको तर्फबाट','प्रतिवादीको तर्फबाट','नेपाल सरकारको तर्फबाट','पुनरावेदकको तर्फबाट','प्रत्यर्थीको तर्फबाट','custom'];
-const SIDE_LABELS = {custom:'Custom...'};
-const GOVT_SIDE = 'नेपाल सरकारको तर्फबाट';
-const GOVT_ROLES = ['सहायक जिल्ला न्यायाधिवक्ता','जिल्ला न्यायाधिवक्ता','उपन्यायाधिवक्ता','सहन्यायाधिवक्ता','नायव महान्यायाधिवक्ता','महान्यायाधिवक्ता'];
-
 const NepaliDigits = {'०':'0','१':'1','२':'2','३':'3','४':'4','५':'5','६':'6','७':'7','८':'8','९':'9'};
 const NepaliNums = ['','(१)','(२)','(३)','(४)','(५)','(६)','(७)','(८)','(९)'];
+
+function initScrollButtons() {
+  const goTop = document.getElementById('backTopBtn');
+  const goBottom = document.getElementById('goBottomBtn');
+  if (goTop) {
+    goTop.addEventListener('click', e => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+  if (goBottom) {
+    goBottom.addEventListener('click', e => {
+      e.preventDefault();
+      document.getElementById('outputAnchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+  const styleMode = document.getElementById('styleMode');
+  if (styleMode) {
+    styleMode.addEventListener('change', () => {
+      refreshStyleSideOptions();
+      if ($('autoGenerate').checked) generate(); else showOutput();
+    });
+  }
+}
+
+function refreshStyleSideOptions() {
+  const sides = getActiveSides();
+  document.querySelectorAll('.partySide').forEach(select => {
+    const current = select.value;
+    const valid = sides.includes(current) ? current : sides[0];
+    select.innerHTML = sides.map(v => `<option value="${escapeHtml(v)}" ${v === valid ? 'selected' : ''}>${escapeHtml(SIDE_LABELS[v] || v)}</option>`).join('');
+    const block = select.closest('.partyBlock');
+    if (block) {
+      block.querySelector('.customSide').style.display = valid === 'custom' ? 'block' : 'none';
+      block.querySelector('.govtRole').style.display = valid === GOVT_SIDE ? 'block' : 'none';
+    }
+  });
+}
 
 // ── Connector management ─────────────────────────────────────────────
 // One connector between each pair of parties.
@@ -665,10 +748,40 @@ function sortBySeniority(records) {
   });
 }
 
+function isPurePartySide(side) {
+  return ['निवेदक','विपक्षी','वादी','प्रतिवादी','निवेदकको वारेस','वादीको वारेस','प्रतिवादीको वारेस','पुनरावेदक','पुनरावेदक वारेस','प्रत्यर्थी','प्रत्यर्थीको वारेस'].includes(side);
+}
+
+function getFirstPartyPrefix() {
+  const firstBlock = document.querySelector('.partyBlock');
+  if (!firstBlock) return '';
+  const side = firstBlock.querySelector('.partySide')?.value;
+  if (['निवेदकको तर्फबाट','निवेदक वादीको तर्फबाट','निवेदक प्रतिवादीको तर्फबाट','निवेदक नेपाल सरकारको तर्फबाट','विपक्षीको तर्फबाट'].includes(side) || isPurePartySide(side)) {
+    return 'प्रस्तुत निवेदनमा';
+  }
+  if (side) {
+    return 'प्रस्तुत मुद्दामा';
+  }
+  return '';
+}
+
 function makeGroupPhrase(group, intraConnector) {
   const honorific = $('honorific').value.trim();
-  const recs = group.records;
+  const recs = group.records || [];
   if (!recs.length) return '';
+
+  const styleMode = $('styleMode')?.value;
+  if (styleMode === STYLE_MODE.PARTY) {
+    // Style2: remove any "तर्फबाट" and append 'ले' to the joined names
+    const rawSide = String(group.side || '').replace(/\s*(को\s*)?तर्फबाट\s*$/,'').trim();
+    const names = joinNepaliList(recs.map(displayRecordName)).replace(/\s+$/,'');
+    const namesWithLe = names + 'ले';
+    return [rawSide, namesWithLe].filter(Boolean).join(' ');
+  }
+
+  if (isPurePartySide(group.side)) {
+    return [group.side, joinNepaliList(recs.map(displayRecordName))].filter(Boolean).join(' ');
+  }
 
   if (group.govtRole) {
     const names = joinNepaliList(recs.map(displayRecordName));
@@ -683,7 +796,6 @@ function makeGroupPhrase(group, intraConnector) {
   if (allSenior) {
     return [group.side, [honorific, seniorTitle(recs.length)].filter(Boolean).join(' '), joinNepaliList(recs.map(displayRecordName))].filter(Boolean).join(' ');
   }
-  // Mixed
   const seniors = recs.filter(r => r.senior), normals = recs.filter(r => !r.senior);
   const parts = [];
   if (seniors.length) parts.push([[honorific, seniorTitle(seniors.length)].filter(Boolean).join(' '), joinNepaliList(seniors.map(displayRecordName))].filter(Boolean).join(' '));
@@ -694,17 +806,26 @@ function makeGroupPhrase(group, intraConnector) {
 function makeSentence(groups) {
   const valid = (groups || []).filter(g => g.records && g.records.length);
   if (!valid.length) return '';
-  const prefix = $('prefixText').value.trim();
-  const suffix = $('suffixText').value.trim();
+  const styleMode = $('styleMode')?.value;
+  const rawPrefix = $('prefixText').value.trim();
+  // Do not treat 'यसमा' specially; use rawPrefix if present, otherwise heuristic
+  const prefix = styleMode === STYLE_MODE.PARTY ? (getFirstPartyPrefix() || 'प्रस्तुत निवेदनमा') : (rawPrefix ? rawPrefix : getFirstPartyPrefix());
+  const suffix = styleMode === STYLE_MODE.PARTY ? '' : $('suffixText').value.trim();
   // Each pair of consecutive groups gets its own connector
   let result = makeGroupPhrase(valid[0], getConnectorValue(1));
   for (let i = 1; i < valid.length; i++) {
     result += getConnectorValue(i) + makeGroupPhrase(valid[i], getConnectorValue(i));
   }
-  return [prefix, result].filter(Boolean).join(' ') + suffix;
+  let base = [prefix, result].filter(Boolean).join(' ');
+  if (styleMode === STYLE_MODE.PARTY) {
+    // In style2 we already add 'ले' to each group's names; just append the statement
+    base = base.replace(/\s+$/,'');
+    return base + ' इजलाससमक्ष राख्नुभएको कुरासमेत सुनियो।';
+  }
+  return base + suffix;
 }
 
-// ── Data ─────────────────────────────────────────────────────────────
+// ── Data ─────────────────────────────────────────────
 function setStatus(msg, type = 'info') {
   $('statusDot').className = 'status-dot' + (type === 'ok' ? ' good' : type === 'bad' ? ' bad' : '');
   $('statusText').innerHTML = msg;
@@ -737,27 +858,39 @@ function loadData() {
   }
 }
 
-// ── Lookup: if senior flag set, prefer type=वरिष्ठ अधिवक्ता records ──
+// ── Lookup: * strictly means TYPE contains वरिष्ठ अधिवक्ता ──
+function isSeniorType(rec) {
+  return String(rec && rec.type ? rec.type : '').includes('वरिष्ठ');
+}
 function lookup(lic, senior) {
   const q = normalizeLicence(lic);
   if (!q) return [];
   const all = advocateData.filter(r => normalizeLicence(r.licenceNo) === q);
-  if (!senior || all.length === 0) return all;
-  // Prefer वरिष्ठ अधिवक्ता type if available
-  const seniorRows = all.filter(r => r.type && r.type.includes('वरिष्ठ'));
-  return seniorRows.length > 0 ? seniorRows : all;
+  if (!all.length) return [];
+
+  // 1234* = import only records whose TYPE column contains वरिष्ठ अधिवक्ता/वरिष्ठ
+  if (senior) return all.filter(isSeniorType);
+
+  // Without * prefer non-senior advocate rows so a normal+senior pair is not treated as duplicate.
+  const advocateRows = all.filter(r => !isSeniorType(r));
+  return advocateRows.length ? advocateRows : all;
 }
 
 function makeCustomRecord(name, idx) { return { licenceNo: 'custom', name: String(name || '').trim(), custom: true, senior: false, _idx: 'custom-' + idx }; }
-function createSideOptions(selected) { return SIDES.map(v => `<option value="${escapeHtml(v)}" ${v === selected ? 'selected' : ''}>${escapeHtml(SIDE_LABELS[v] || v)}</option>`).join(''); }
+function createSideOptions(selected) {
+  const sides = getActiveSides();
+  return sides.map(v => `<option value="${escapeHtml(v)}" ${v === selected ? 'selected' : ''}>${escapeHtml(SIDE_LABELS[v] || v)}</option>`).join('');
+}
 function createGovtRoleOptions(selected = 'सहायक जिल्ला न्यायाधिवक्ता') { return GOVT_ROLES.map(v => `<option value="${escapeHtml(v)}" ${v === selected ? 'selected' : ''}>${escapeHtml(v)}</option>`).join(''); }
 
 // ── Party blocks ──────────────────────────────────────────────────────
-function addPartyBlock(side = 'विपक्षीको तर्फबाट', licences = '') {
+function addPartyBlock(side = null, licences = '') {
   partyCounter++;
   const block = document.createElement('div');
   block.className = 'partyBlock';
   block.dataset.partyId = String(partyCounter);
+  const activeSides = getActiveSides();
+  side = side && activeSides.includes(side) ? side : activeSides[0];
   block.innerHTML = `
     <button type="button" class="remove-party-btn" title="हटाउनुहोस्"><i class="fa-solid fa-xmark"></i></button>
     <div class="partyHead">
@@ -1015,6 +1148,7 @@ document.addEventListener('click', e => {
 document.addEventListener('DOMContentLoaded', () => {
   addPartyBlock('निवेदकको तर्फबाट', '');
   addPartyBlock('विपक्षीको तर्फबाट', '');
+  initScrollButtons();
   loadData();
 });
 </script>
