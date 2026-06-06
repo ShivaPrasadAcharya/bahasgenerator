@@ -273,6 +273,11 @@
       border-radius:14px;padding:10px 16px;cursor:pointer;transition:all .2s;
     }
     .add-party-btn:hover{background:var(--primary);color:white;border-style:solid;transform:translateY(-1px);box-shadow:var(--shadow-sm);}
+    .custom-text-regular{
+      margin-top:14px;padding:14px 16px;border:1.5px solid var(--line2);
+      border-radius:16px;background:var(--card2);
+    }
+    .custom-text-regular label{margin-top:0;}
 
     /* ── BUTTONS ── */
     .btn{
@@ -335,6 +340,55 @@
     .ok{color:var(--accent2);font-weight:600;}
     .muted{color:var(--muted);}
     .hint{font-size:.8rem;color:var(--muted);line-height:1.55;margin-top:6px;}
+
+    /* ── FORM ID SAVE/RECALL ── */
+    .form-id-row{
+      display:grid;grid-template-columns:1.2fr auto auto;gap:10px;align-items:end;
+      padding:14px;margin-bottom:16px;border:1px solid var(--line2);
+      border-radius:16px;background:var(--card2);
+    }
+    .form-id-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+    .formIdNo{background:#fff3e0;border-color:#e8a060;color:#1a1208;}
+    .formIdNo:focus{background:#fff7ed;border-color:var(--primary);box-shadow:0 0 0 3px rgba(232,160,96,.22);}
+    [data-theme="dark"] .formIdNo{background:#3a2412;border-color:#8b4a0c;color:#f0e8d8;}
+    [data-theme="dark"] .formIdNo:focus{background:#432814;border-color:var(--primary);}
+    .form-id-alert{
+      display:none;grid-column:1/-1;margin-top:2px;padding:8px 12px;
+      background:var(--warn-bg);border:1px solid var(--warn-border);
+      border-radius:10px;font-size:.8rem;color:var(--warn-text);line-height:1.5;
+    }
+    .form-id-alert.show{display:block;}
+    .history-panel{
+      display:none;grid-column:1/-1;margin-top:4px;padding:10px 12px;
+      background:var(--card);border:1px solid var(--line);border-radius:14px;
+      box-shadow:var(--shadow-sm);
+    }
+    .history-panel.show{display:block;}
+    .history-head{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      font-size:.82rem;font-weight:700;color:var(--primary);margin-bottom:8px;
+    }
+    .history-list{display:flex;flex-wrap:wrap;gap:8px;}
+    .history-item{
+      display:inline-flex;align-items:center;gap:0;
+      border:1px solid var(--line);background:var(--primary-bg);
+      border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm);
+    }
+    .history-id-btn{
+      border:0;border-right:1px solid var(--line);background:transparent;color:var(--primary);
+      padding:6px 10px;font-size:.82rem;font-weight:700;
+      cursor:pointer;font-family:var(--font-sans);transition:all .15s;
+    }
+    .history-id-btn:hover{background:var(--primary);color:white;}
+    .history-delete-btn{
+      border:0;background:transparent;color:var(--accent);
+      padding:6px 9px;font-size:.82rem;cursor:pointer;
+      font-family:var(--font-sans);transition:all .15s;
+    }
+    .history-delete-btn:hover{background:var(--accent);color:white;}
+    .history-empty{font-size:.82rem;color:var(--muted);line-height:1.5;}
+    @media(max-width:760px){.form-id-row{grid-template-columns:1fr}.form-id-actions .btn{flex:1;justify-content:center}}
+
     .divider{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:20px 0;}
     .ornament{text-align:center;color:var(--gold-light);font-size:1.2rem;letter-spacing:.3em;margin:4px 0 18px;opacity:.6;}
     #outputAnchor{scroll-margin-top:72px;}
@@ -470,10 +524,38 @@
     <div class="ornament">⚖ &nbsp; ◆ &nbsp; ⚖</div>
 
     <div class="grid">
+      <!-- Single Form ID save / recall -->
+      <div class="full form-id-row">
+        <div>
+          <label><i class="fa-solid fa-id-card" style="margin-right:5px;opacity:.6"></i>ID No. / Form ID</label>
+          <input id="formIdNo" class="formIdNo" inputmode="text" placeholder="जस्तै: 1, A1, case-01" />
+          <p class="hint">ID No. लेखेर Enter/blur गर्दा पहिले Save गरिएको पूरा input set स्वतः फर्किन्छ।</p>
+        </div>
+        <div class="form-id-actions">
+          <button type="button" class="btn btn-primary" id="saveFormBtn"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+          <button type="button" class="btn btn-secondary" id="newFormBtn"><i class="fa-solid fa-file-circle-plus"></i> New</button>
+          <button type="button" class="btn btn-secondary" id="historyBtn"><i class="fa-solid fa-clock-rotate-left"></i> History</button>
+        </div>
+        <button type="button" class="btn btn-ghost" id="clearSavedFormsBtn"><i class="fa-solid fa-trash-can"></i> Clear Saved</button>
+        <div class="form-id-alert" id="formIdAlert"></div>
+        <div class="history-panel" id="historyPanel">
+          <div class="history-head">
+            <span><i class="fa-solid fa-list"></i> Saved History ID</span>
+            <small class="muted">ID क्लिक गर्दा form repopulate हुन्छ</small>
+          </div>
+          <div class="history-list" id="historyList"></div>
+        </div>
+      </div>
+
       <!-- Party list -->
       <div class="full">
         <label><i class="fa-solid fa-users" style="margin-right:5px;opacity:.6"></i>पक्ष तथा Licence No.</label>
         <div class="partyList" id="partyList"></div>
+        <div class="custom-text-regular" id="customTextRegularBox">
+          <label><i class="fa-solid fa-align-left" style="margin-right:5px;opacity:.6"></i>Custom Text</label>
+          <textarea id="customText" rows="3" placeholder="यहाँ लेखिएको text output मा auto-generated text पछि नयाँ paragraph मा देखिन्छ।"></textarea>
+          <p class="hint">यो text output मा छुट्टै paragraph भएर थपिन्छ।</p>
+        </div>
         <button type="button" class="add-party-btn" id="addPartyBtn">
           <i class="fa-solid fa-circle-plus"></i> अर्को पक्ष थप्नुहोस्
         </button>
@@ -532,6 +614,8 @@
         <div class="output" id="outputBox">Local data load भएपछि output यहाँ देखिन्छ।</div>
         <div class="copy-row">
           <button class="btn btn-primary" id="copyOutput"><i class="fa-solid fa-copy"></i> Copy Output</button>
+          <button class="btn btn-secondary" id="downloadDocx"><i class="fa-solid fa-file-word"></i> Download .docx</button>
+          <button class="btn btn-secondary" id="downloadAllZip"><i class="fa-solid fa-file-zipper"></i> Download All (ZIP)</button>
           <button class="btn btn-secondary" id="copyName"><i class="fa-solid fa-signature"></i> Copy Name Only</button>
           <button class="btn btn-ghost" id="clearBtn"><i class="fa-solid fa-rotate-left"></i> Clear</button>
         </div>
@@ -557,6 +641,10 @@ let activeRecord = null;
 let activeRecords = [];
 let missingLicences = [];
 let partyCounter = 0;
+let suppressFormIdRecall = false;
+
+const FORM_STORAGE_KEY = 'advocateLookupSavedFormsV1';
+const FORM_STORAGE_TTL_MS = 12 * 60 * 60 * 1000;
 
 const STYLE_MODE = { DEFAULT: 'style1', PARTY: 'style2' };
 const SIDES_STYLE1 = ['निवेदकको तर्फबाट','विपक्षीको तर्फबाट','वादीको तर्फबाट','प्रतिवादीको तर्फबाट','नेपाल सरकारको तर्फबाट','पुनरावेदकको तर्फबाट','प्रत्यर्थीको तर्फबाट','custom'];
@@ -571,6 +659,196 @@ const CONNECTOR_VALUES = {'तथा':' तथा ','र':' र ','एवं':' 
 
 const NepaliDigits = {'०':'0','१':'1','२':'2','३':'3','४':'4','५':'5','६':'6','७':'7','८':'8','९':'9'};
 const NepaliNums = ['','(१)','(२)','(३)','(४)','(५)','(६)','(७)','(८)','(९)'];
+
+
+// ── Single Form ID: manual save / recall / expiry ────────────────────
+function normalizeFormId(v) { return String(v || '').trim(); }
+function readSavedForms() {
+  try { return JSON.parse(localStorage.getItem(FORM_STORAGE_KEY) || '{}') || {}; }
+  catch (e) { return {}; }
+}
+function writeSavedForms(store) {
+  try { localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(store || {})); }
+  catch (e) { toast('<i class="fa-solid fa-triangle-exclamation"></i> Local storage save हुन सकेन'); }
+}
+function purgeExpiredSavedForms() {
+  const store = readSavedForms(); const now = Date.now(); let changed = false;
+  Object.keys(store).forEach(id => {
+    if (!store[id] || !store[id].savedAt || now - store[id].savedAt > FORM_STORAGE_TTL_MS) { delete store[id]; changed = true; }
+  });
+  if (changed) writeSavedForms(store);
+  return store;
+}
+function showFormIdAlert(msg, type = 'info') {
+  const el = $('formIdAlert'); if (!el) return;
+  if (!msg) { el.innerHTML = ''; el.classList.remove('show'); return; }
+  const icon = type === 'bad' ? 'fa-triangle-exclamation' : type === 'ok' ? 'fa-circle-check' : 'fa-circle-info';
+  el.innerHTML = `<b><i class="fa-solid ${icon}"></i></b> ${escapeHtml(msg)}`;
+  el.classList.add('show');
+}
+function getSavedHistoryIds() {
+  const store = purgeExpiredSavedForms();
+  // Show saved history IDs in ascending / alphabetical order.
+  // numeric:true keeps ID-2 before ID-10, while still supporting Nepali/English text IDs.
+  return Object.keys(store).sort((a, b) =>
+    String(a).localeCompare(String(b), 'ne', { numeric: true, sensitivity: 'base' })
+  );
+}
+function deleteSavedHistoryId(id) {
+  const cleanId = String(id || '').trim();
+  if (!cleanId) return;
+  const ok = confirm(`Saved history बाट यो ID delete गर्ने हो?\n\nID: ${cleanId}\n\nDelete गरेपछि यो ID बाट form repopulate गर्न सकिँदैन।`);
+  if (!ok) {
+    showFormIdAlert(`ID delete रद्द गरियो: ${cleanId}`, 'info');
+    return;
+  }
+  const store = purgeExpiredSavedForms();
+  if (store[cleanId]) {
+    delete store[cleanId];
+    writeSavedForms(store);
+    if (($('formIdNo')?.value || '').trim() === cleanId) $('formIdNo').value = '';
+    refreshHistoryPanel();
+    showFormIdAlert(`Saved history ID delete भयो: ${cleanId}`, 'ok');
+    toast('<i class="fa-solid fa-trash-can"></i> History ID deleted');
+  } else {
+    refreshHistoryPanel();
+    showFormIdAlert(`यो ID saved history मा भेटिएन: ${cleanId}`, 'info');
+  }
+}
+function refreshHistoryPanel() {
+  const list = $('historyList'); if (!list) return;
+  const ids = getSavedHistoryIds();
+  if (!ids.length) {
+    list.innerHTML = '<div class="history-empty"><i class="fa-regular fa-folder-open"></i> Saved history ID छैन। Save गरेपछि ID यहाँ देखिन्छ।</div>';
+    return;
+  }
+  list.innerHTML = ids.map(id => `
+    <span class="history-item" data-history-id="${escapeHtml(id)}">
+      <button type="button" class="history-id-btn" data-history-id="${escapeHtml(id)}" title="यो ID load गर्नुहोस्">
+        <i class="fa-solid fa-id-card"></i> ${escapeHtml(id)}
+      </button>
+      <button type="button" class="history-delete-btn" data-history-delete-id="${escapeHtml(id)}" title="यो saved ID delete गर्नुहोस्">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+    </span>`).join('');
+  list.querySelectorAll('.history-id-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.historyId || '';
+      if ($('formIdNo')) $('formIdNo').value = id;
+      recallFormById();
+      $('historyPanel')?.classList.remove('show');
+    });
+  });
+  list.querySelectorAll('.history-delete-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      e.stopPropagation();
+      deleteSavedHistoryId(btn.dataset.historyDeleteId || '');
+    });
+  });
+}
+function toggleHistoryPanel() {
+  const panel = $('historyPanel'); if (!panel) return;
+  refreshHistoryPanel();
+  panel.classList.toggle('show');
+}
+function collectFormState() {
+  const parties = Array.from(document.querySelectorAll('.partyBlock')).map(block => ({
+    side: block.querySelector('.partySide')?.value || '',
+    customSide: block.querySelector('.customSide')?.value || '',
+    govtRole: block.querySelector('.govtRole')?.value || '',
+    licences: block.querySelector('.licenceNos')?.value || ''
+  }));
+  const connectors = Array.from(document.querySelectorAll('.connector-select')).map(sel => sel.value);
+  return {
+    styleMode: $('styleMode')?.value || STYLE_MODE.DEFAULT,
+    honorific: $('honorific')?.value || '',
+    prefixText: $('prefixText')?.value || '',
+    suffixText: $('suffixText')?.value || '',
+    customText: $('customText')?.value || '',
+    includeShri: !!$('includeShri')?.checked,
+    autoGenerate: !!$('autoGenerate')?.checked,
+    parties,
+    connectors
+  };
+}
+function applyFormState(state, id = '') {
+  if (!state) return;
+  suppressFormIdRecall = true;
+  if ($('formIdNo')) $('formIdNo').value = id;
+  if ($('styleMode')) $('styleMode').value = state.styleMode || STYLE_MODE.DEFAULT;
+  document.querySelectorAll('.partyBlock').forEach(b => b.remove());
+  partyCounter = 0;
+  refreshStyleSideOptions();
+  const parties = Array.isArray(state.parties) && state.parties.length ? state.parties : [
+    { side:'निवेदकको तर्फबाट', licences:'' },
+    { side:'विपक्षीको तर्फबाट', licences:'' }
+  ];
+  parties.forEach(p => {
+    const block = addPartyBlock(p.side || null, p.licences || '');
+    if (p.customSide) block.querySelector('.customSide').value = p.customSide;
+    if (p.govtRole) block.querySelector('.govtRole').value = p.govtRole;
+    const sv = block.querySelector('.partySide').value;
+    block.querySelector('.customSide').style.display = sv === 'custom' ? 'block' : 'none';
+    block.querySelector('.govtRole').style.display = sv === GOVT_SIDE ? 'block' : 'none';
+  });
+  syncConnectors();
+  (state.connectors || []).forEach((v, i) => { const sel = document.getElementById('connector-' + (i + 1)); if (sel && CONNECTOR_OPTIONS.includes(v)) sel.value = v; });
+  if ($('honorific')) $('honorific').value = state.honorific ?? 'विद्वान';
+  if ($('prefixText')) $('prefixText').value = state.prefixText ?? '';
+  if ($('suffixText')) $('suffixText').value = state.suffixText ?? 'ले गर्नुभएको बहस सुनियो।';
+  if ($('customText')) $('customText').value = state.customText ?? '';
+  if ($('includeShri')) $('includeShri').checked = state.includeShri !== false;
+  if ($('autoGenerate')) $('autoGenerate').checked = state.autoGenerate !== false;
+  renumberParties();
+  suppressFormIdRecall = false;
+  if ($('autoGenerate')?.checked) generate(); else showOutput();
+}
+function resetToNewForm() {
+  suppressFormIdRecall = true;
+  if ($('formIdNo')) $('formIdNo').value = '';
+  showFormIdAlert('');
+  document.querySelectorAll('.partyBlock').forEach(b => b.remove());
+  partyCounter = 0;
+  if ($('styleMode')) $('styleMode').value = STYLE_MODE.DEFAULT;
+  if ($('honorific')) $('honorific').value = 'विद्वान';
+  if ($('prefixText')) $('prefixText').value = '';
+  if ($('suffixText')) $('suffixText').value = 'ले गर्नुभएको बहस सुनियो।';
+  if ($('customText')) $('customText').value = '';
+  if ($('includeShri')) $('includeShri').checked = true;
+  if ($('autoGenerate')) $('autoGenerate').checked = true;
+  addPartyBlock('निवेदकको तर्फबाट', '');
+  addPartyBlock('विपक्षीको तर्फबाट', '');
+  syncConnectors();
+  suppressFormIdRecall = false;
+  $('outputBox').textContent = '';
+  renderRecord(null); renderMultiple([], []);
+  document.querySelector('.licenceNos')?.focus();
+}
+function saveCurrentFormById() {
+  const id = normalizeFormId($('formIdNo')?.value);
+  if (!id) { showFormIdAlert('पहिले ID No. लेख्नुहोस्।', 'bad'); $('formIdNo')?.focus(); return; }
+  const store = purgeExpiredSavedForms();
+  const repeated = !!store[id];
+  store[id] = { savedAt: Date.now(), state: collectFormState() };
+  writeSavedForms(store);
+  refreshHistoryPanel();
+  showFormIdAlert(repeated ? `Same ID No. पहिले नै थियो; हालको input set त्यसै ID मा update भयो: ${id}` : `Saved: ${id}`, repeated ? 'bad' : 'ok');
+  toast(repeated ? '<i class="fa-solid fa-copy"></i> Same ID updated' : '<i class="fa-solid fa-floppy-disk"></i> Saved');
+}
+function recallFormById() {
+  if (suppressFormIdRecall) return;
+  const id = normalizeFormId($('formIdNo')?.value);
+  if (!id) { showFormIdAlert(''); return; }
+  const store = purgeExpiredSavedForms();
+  if (store[id] && store[id].state) {
+    applyFormState(store[id].state, id);
+    showFormIdAlert(`ID No. ${id} बाट saved input set repopulate भयो।`, 'ok');
+    toast('<i class="fa-solid fa-clock-rotate-left"></i> Saved form restored');
+  } else {
+    showFormIdAlert(`यो ID No. मा saved data छैन। Save क्लिक गरेपछि १२ घण्टासम्म रहनेछ: ${id}`, 'info');
+  }
+}
 
 function initScrollButtons() {
   const goTop = document.getElementById('backTopBtn');
@@ -1057,14 +1335,16 @@ function showOutput(groupsCache = null) {
   renderRecord(activeRecord); renderMultiple(collected.groups, collected.missing); showLookupAlert(collected);
   if (!collected.groups.length) { $('outputBox').textContent = ''; return; }
   const sentence = makeSentence(collected.groups);
+  const customText = ($('customText')?.value || '').trim();
   if (sentence) {
-    $('outputBox').textContent = sentence;
+    $('outputBox').textContent = customText ? (sentence + '\n\n' + customText) : sentence;
     const notes = [];
     if (collected.missing.length) notes.push(`${collected.missing.join(', ')} का लागि नाम भेटिएन`);
     if (collected.duplicates && collected.duplicates.length) notes.push(`${collected.duplicates.map(d => d.licence).join(', ')} एउटै licence no. धेरै जनामा भेटियो`);
     if (notes.length) $('outputBox').textContent += `\n\nनोट: ${notes.join('; ')}।`;
   } else {
-    $('outputBox').innerHTML = `<span class="error"><i class="fa-solid fa-triangle-exclamation"></i> दिइएका Licence No. का लागि स्पष्ट नाम भेटिएन।</span>`;
+    if (customText) $('outputBox').textContent = customText;
+    else $('outputBox').innerHTML = `<span class="error"><i class="fa-solid fa-triangle-exclamation"></i> दिइएका Licence No. का लागि स्पष्ट नाम भेटिएन।</span>`;
   }
 }
 
@@ -1109,12 +1389,205 @@ document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.ctrlKey) 
 $('addPartyBtn').addEventListener('click', () => addPartyBlock('custom', ''));
 
 // Settings listeners
-['includeShri', 'honorific', 'prefixText', 'suffixText', 'autoGenerate'].forEach(id => {
+['includeShri', 'honorific', 'prefixText', 'suffixText', 'customText', 'autoGenerate'].forEach(id => {
   $(id).addEventListener('input', () => showOutput());
   $(id).addEventListener('change', () => showOutput());
 });
 
+
+$('saveFormBtn').addEventListener('click', saveCurrentFormById);
+$('newFormBtn').addEventListener('click', resetToNewForm);
+$('historyBtn').addEventListener('click', toggleHistoryPanel);
+$('clearSavedFormsBtn').addEventListener('click', () => {
+  const ids = getSavedHistoryIds();
+  if (!ids.length) {
+    showFormIdAlert('Clear गर्ने saved history छैन।', 'info');
+    refreshHistoryPanel();
+    return;
+  }
+  const ok = confirm(`Saved history clear गर्ने हो?\n\nयसले ${ids.length} वटा saved ID हटाउँछ र पछि repopulate गर्न सकिँदैन।`);
+  if (!ok) {
+    showFormIdAlert('Saved history clear रद्द गरियो।', 'info');
+    return;
+  }
+  localStorage.removeItem(FORM_STORAGE_KEY);
+  refreshHistoryPanel();
+  showFormIdAlert('Saved history cleared.', 'ok');
+  toast('<i class="fa-solid fa-trash-can"></i> Saved history cleared');
+});
+$('formIdNo').addEventListener('change', recallFormById);
+$('formIdNo').addEventListener('blur', recallFormById);
+$('formIdNo').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); recallFormById(); }
+});
+
+
+// ── DOCX download (browser-side, no external dependency) ───────────────
+function escapeXmlDocx(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;'
+  }[c]));
+}
+function makeDocxDocumentXml(text) {
+  const normalized = String(text || '').replace(/\r\n/g, '\n').replace(/\r/g, '\n').trim();
+  const paragraphs = normalized ? normalized.split('\n') : [''];
+  const pXml = paragraphs.map(line => {
+    const safe = escapeXmlDocx(line);
+    return `<w:p><w:pPr><w:spacing w:after="160" w:line="360" w:lineRule="auto"/><w:jc w:val="both"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Kalimati" w:hAnsi="Kalimati" w:eastAsia="Kalimati" w:cs="Kalimati"/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr><w:t xml:space="preserve">${safe}</w:t></w:r></w:p>`;
+  }).join('');
+  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" mc:Ignorable="w14 wp14">
+<w:body>${pXml}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`;
+}
+function crc32Bytes(bytes) {
+  let crc = -1;
+  for (let i = 0; i < bytes.length; i++) {
+    crc ^= bytes[i];
+    for (let j = 0; j < 8; j++) crc = (crc >>> 1) ^ (0xEDB88320 & -(crc & 1));
+  }
+  return (crc ^ -1) >>> 0;
+}
+function u16(n) { return [n & 255, (n >>> 8) & 255]; }
+function u32(n) { return [n & 255, (n >>> 8) & 255, (n >>> 16) & 255, (n >>> 24) & 255]; }
+function concatUint8(parts) {
+  const total = parts.reduce((sum, p) => sum + p.length, 0);
+  const out = new Uint8Array(total);
+  let pos = 0;
+  parts.forEach(p => { out.set(p, pos); pos += p.length; });
+  return out;
+}
+function dosDateTime(date = new Date()) {
+  const time = ((date.getHours() & 31) << 11) | ((date.getMinutes() & 63) << 5) | ((Math.floor(date.getSeconds() / 2)) & 31);
+  const dosDate = (((date.getFullYear() - 1980) & 127) << 9) | (((date.getMonth() + 1) & 15) << 5) | (date.getDate() & 31);
+  return { time, date: dosDate };
+}
+function buildZipStore(files) {
+  const enc = new TextEncoder();
+  const localParts = [];
+  const centralParts = [];
+  let offset = 0;
+  const dt = dosDateTime();
+  files.forEach(file => {
+    const nameBytes = enc.encode(file.name);
+    const dataBytes = file.bytes instanceof Uint8Array ? file.bytes : enc.encode(file.content || '');
+    const crc = crc32Bytes(dataBytes);
+    const localHeader = new Uint8Array([
+      ...u32(0x04034b50), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(dt.time), ...u16(dt.date),
+      ...u32(crc), ...u32(dataBytes.length), ...u32(dataBytes.length), ...u16(nameBytes.length), ...u16(0)
+    ]);
+    localParts.push(localHeader, nameBytes, dataBytes);
+    const centralHeader = new Uint8Array([
+      ...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(dt.time), ...u16(dt.date),
+      ...u32(crc), ...u32(dataBytes.length), ...u32(dataBytes.length), ...u16(nameBytes.length), ...u16(0), ...u16(0),
+      ...u16(0), ...u16(0), ...u32(0), ...u32(offset)
+    ]);
+    centralParts.push(centralHeader, nameBytes);
+    offset += localHeader.length + nameBytes.length + dataBytes.length;
+  });
+  const centralSize = centralParts.reduce((sum, p) => sum + p.length, 0);
+  const end = new Uint8Array([
+    ...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(files.length), ...u16(files.length),
+    ...u32(centralSize), ...u32(offset), ...u16(0)
+  ]);
+  return concatUint8([...localParts, ...centralParts, end]);
+}
+function makeDocxBytes(text) {
+  const files = [
+    { name: '[Content_Types].xml', content: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>` },
+    { name: '_rels/.rels', content: `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>` },
+    { name: 'word/document.xml', content: makeDocxDocumentXml(text) }
+  ];
+  return buildZipStore(files);
+}
+function makeDocxBlob(text) {
+  return new Blob([makeDocxBytes(text)], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+}
+function safeFileNamePart(s) {
+  // Keep filename the same as the user-provided ID as far as the file system allows.
+  // Only characters that Windows/macOS cannot use in filenames are replaced.
+  return String(s || '').trim().replace(/[\\/:*?"<>|]+/g, '_').replace(/[\u0000-\u001F]+/g, '').slice(0, 120);
+}
+function downloadOutputDocx() {
+  const text = $('outputBox').textContent.trim();
+  if (!text) {
+    toast('<i class="fa-solid fa-circle-info"></i> Download गर्ने output छैन');
+    return;
+  }
+  const id = safeFileNamePart($('formIdNo')?.value || '');
+  const filename = (id ? id : 'advocate_output') + '.docx';
+  const blob = makeDocxBlob(text);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  toast('<i class="fa-solid fa-file-word"></i> .docx downloaded');
+}
+
+function downloadAllSavedDocxZip() {
+  const ids = getSavedHistoryIds();
+  if (!ids.length) {
+    showFormIdAlert('ZIP बनाउन saved history छैन। पहिले ID सहित Save गर्नुहोस्।', 'info');
+    toast('<i class="fa-solid fa-circle-info"></i> Saved history छैन');
+    return;
+  }
+  if (!advocateData.length) {
+    toast('<i class="fa-solid fa-spinner fa-spin"></i> Data loading...');
+    return;
+  }
+
+  const store = purgeExpiredSavedForms();
+  const currentId = $('formIdNo')?.value || '';
+  const currentState = collectFormState();
+  const currentAlert = $('formIdAlert')?.innerHTML || '';
+  const currentAlertShown = $('formIdAlert')?.classList.contains('show');
+  const zipFiles = [];
+
+  try {
+    ids.forEach(id => {
+      const saved = store[id];
+      if (!saved || !saved.state) return;
+      applyFormState(saved.state, id);
+      generate();
+      const text = $('outputBox').textContent.trim();
+      if (!text) return;
+      const name = `${safeFileNamePart(id) || 'saved_id'}.docx`;
+      zipFiles.push({ name, bytes: makeDocxBytes(text) });
+    });
+  } finally {
+    applyFormState(currentState, currentId);
+    if ($('formIdAlert')) {
+      $('formIdAlert').innerHTML = currentAlert;
+      $('formIdAlert').classList.toggle('show', !!currentAlertShown);
+    }
+    refreshHistoryPanel();
+  }
+
+  if (!zipFiles.length) {
+    showFormIdAlert('Saved history भेटियो तर ZIP बनाउन output तयार भएन।', 'bad');
+    return;
+  }
+
+  const zipBytes = buildZipStore(zipFiles);
+  const blob = new Blob([zipBytes], { type: 'application/zip' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'advocate_outputs_all.zip';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  showFormIdAlert(`Download All ZIP तयार भयो: ${zipFiles.length} वटा .docx`, 'ok');
+  toast('<i class="fa-solid fa-file-zipper"></i> ZIP downloaded');
+}
+
 $('copyOutput').addEventListener('click', () => copyText($('outputBox').textContent.trim()));
+$('downloadDocx').addEventListener('click', downloadOutputDocx);
+$('downloadAllZip').addEventListener('click', downloadAllSavedDocxZip);
 $('copyName').addEventListener('click', () => copyText(activeRecords.length ? joinNepaliList(activeRecords.map(displayRecordName)) : ''));
 
 $('clearBtn').addEventListener('click', () => {
@@ -1127,6 +1600,9 @@ $('clearBtn').addEventListener('click', () => {
     const gr = first.querySelector('.govtRole'); if (gr) gr.style.display = 'none';
     const al = first.querySelector('.inline-alert'); if (al) { al.innerHTML = ''; al.classList.remove('show'); }
   }
+  if ($('formIdNo')) $('formIdNo').value = '';
+  if ($('customText')) $('customText').value = '';
+  showFormIdAlert('');
   activeRecord = null; activeRecords = []; missingLicences = [];
   $('outputBox').textContent = ''; renderRecord(null); renderMultiple([], []);
   renumberParties(); syncConnectors();
@@ -1146,6 +1622,7 @@ document.addEventListener('click', e => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+  purgeExpiredSavedForms();
   addPartyBlock('निवेदकको तर्फबाट', '');
   addPartyBlock('विपक्षीको तर्फबाट', '');
   initScrollButtons();
